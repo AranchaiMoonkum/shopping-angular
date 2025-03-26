@@ -1,8 +1,10 @@
-<div>
+<div class="product-filter">
     <!-- filter by category -->
-    <label for="category">category:</label>
+    <label for="category">Category:</label>
     <select
         class="category-filter"
+        name="category"
+        id="category"
         (change)="selectCategory($event)"
         [value]="selectedCategory"
     >
@@ -14,11 +16,11 @@
 
     <!-- sort by -->
     <label for="sort">Sort By:</label>
-    <select (change)="selectSort($event)">
+    <select name="sort" id="sort" (change)="selectSort($event)">
         <option value="none">no sorting</option>
-        <option value="price-low-to-high">low to high</option>
-        <option value="price-high-to-low">high to low</option>
-        <option value="rating-low-to-high">low to high</option>
-        <option value="rating-high-to-low">high to low</option>
+        <option value="price-low-to-high">low to high price</option>
+        <option value="price-high-to-low">high to low price</option>
+        <option value="rating-low-to-high">low to high rating</option>
+        <option value="rating-high-to-low">high to low rating</option>
     </select>
 </div>
