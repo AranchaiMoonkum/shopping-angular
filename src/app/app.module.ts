@@ -14,6 +14,9 @@ import { HttpClientModule, provideHttpClient, withFetch } from "@angular/common/
 import { MatCardModule } from "@angular/material/card"
 import { MatDividerModule } from "@angular/material/divider"
 
+// import functional components
+import { ProductFilterModule } from "./components/product-filter/product-filter.module"
+
 @NgModule({
     declarations: [AppComponent],
     imports: [
@@ -21,7 +24,8 @@ import { MatDividerModule } from "@angular/material/divider"
         AppRoutingModule,
         HttpClientModule,
         MatCardModule,
-        MatDividerModule
+        MatDividerModule,
+        ProductFilterModule
     ],
     providers: [provideClientHydration(), provideAnimationsAsync(), provideHttpClient(withFetch())],
     bootstrap: [AppComponent]
