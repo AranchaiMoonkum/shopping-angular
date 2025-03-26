@@ -1,3 +1,11 @@
-<main class="main"></main>
+<main class="main">
+    <ul>
+        <li *ngFor="let product of products">
+            {{ product.name }}
+            {{ product.title }}
+            {{ product.price }}
+        </li>
+    </ul>
+</main>
 
 <router-outlet />
