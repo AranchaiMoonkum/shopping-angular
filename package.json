@@ -7,7 +7,8 @@
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
-        "serve:ssr:shopping-angular": "node dist/shopping-angular/server/server.mjs"
+        "serve:ssr:shopping-angular": "node dist/shopping-angular/server/server.mjs",
+        "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
     },
     "private": true,
     "dependencies": {
