@@ -1,0 +1,24 @@
+<div>
+    <!-- filter by category -->
+    <label for="category">category:</label>
+    <select
+        class="category-filter"
+        (change)="selectCategory($event)"
+        [value]="selectedCategory"
+    >
+        <option value="all">all categories</option>
+        <option *ngFor="let category of categories" [value]="category">
+            {{ category }}
+        </option>
+    </select>
+
+    <!-- sort by -->
+    <label for="sort">Sort By:</label>
+    <select (change)="selectSort($event)">
+        <option value="none">no sorting</option>
+        <option value="price-low-to-high">low to high</option>
+        <option value="price-high-to-low">high to low</option>
+        <option value="rating-low-to-high">low to high</option>
+        <option value="rating-high-to-low">high to low</option>
+    </select>
+</div>
