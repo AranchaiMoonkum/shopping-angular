@@ -1,0 +1,43 @@
+<article class="header">
+    <h1 class="header__title">Shopping website</h1>
+</article>
+
+<section>
+    <app-product-filter
+        [categories]="categories"
+        [selectedCategory]="selectedCategory"
+        [selectedSort]="selectedSort"
+        (categorySelected)="filterProducts($event)"
+        (sortSelected)="sortProducts($event)"
+    >
+    </app-product-filter>
+</section>
+
+<div class="container">
+    <article *ngFor="let product of filteredProducts" class="product">
+        <a class="product__link">
+            <section class="product-header">
+                <img
+                    class="product__image"
+                    src="{{ product.image }}"
+                    alt="{{ product.title }}"
+                />
+            </section>
+
+            <section class="product-body">
+                <p class="product__title">{{ product.title }}</p>
+                <p class="product__price product__paragraph">
+                    {{ product.price | currency }}
+                </p>
+                <div class="star-rating">
+                    <div
+                        class="star-rating__filled"
+                        [ngStyle]="{
+                            width: getStarPercentage(product.rating.rate),
+                        }"
+                    ></div>
+                </div>
+            </section>
+        </a>
+    </article>
+</div>
