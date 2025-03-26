@@ -1,11 +1,26 @@
 <main class="main">
-    <ul>
-        <li *ngFor="let product of products">
-            {{ product.name }}
-            {{ product.title }}
-            {{ product.price }}
-        </li>
-    </ul>
+    <article class="header">
+        <h1 class="header__title">Shopping website</h1>
+    </article>
+
+    <div class="container">
+        <article *ngFor="let product of products" class="product">
+            <a class="product__link" [routerLink]="['/product', product.id]">
+                <section class="product-header">
+                    <img class="product__image" src="{{ product.image }}" alt="{{ product.title }}" />
+                </section>
+
+                <section class="product-body">
+                    <p class="product__title">{{ product.title }}</p>
+                    <p class="product__price product__paragraph">{{ product.price | currency }}</p>
+                </section>
+
+                <section class="product-footer">
+                    <p class="product__category product__paragraph">{{ product.category }}</p>
+                </section>
+            </a>
+        </article>
+    </div>
 </main>
 
 <router-outlet />
