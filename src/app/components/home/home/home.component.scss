@@ -88,21 +88,51 @@ $border: 1px solid $black;
         transform: scale(1.05);
     }
 
-    .product__details {
+    .product__wrapper {
         display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 1rem;
         padding-top: 0.75rem;
 
-        h2 {
-            line-height: 150%;
-            font-size: 0.9rem;
-            font-weight: 400;
-            margin: 0;
+        .product__details {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+
+            h2 {
+                line-height: 150%;
+                font-size: 0.9rem;
+                font-weight: 400;
+                margin-bottom: 2px !important;
+            }
+
+            &:hover h2 {
+                text-decoration: underline;
+            }
         }
 
-        &:hover h2 {
-            text-decoration: underline;
+        .product-add__button {
+            border-radius: 0;
+            border: $border;
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 25px;
+            height: 25px;
+
+            &:hover {
+                background: $pale-blue;
+                color: $white;
+                border: 1px solid $pale-blue;
+            }
+
+            span {
+                font-size: 1rem;
+                font-weight: 400;
+            }
         }
     }
 
