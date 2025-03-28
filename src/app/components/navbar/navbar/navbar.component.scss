@@ -6,54 +6,30 @@ $yellow: #f4d914;
 $green: #2ecc71;
 $border: 1px solid $black;
 
-mat-sidenav-content {
-    min-height: 100vh;
-}
-
-.sidenav {
-    border-right: $border;
-    width: 250px;
-
-    mat-toolbar {
-        background-color: $pale-blue;
-        color: $white;
-        border-bottom: $border;
-    }
-}
-
-.toolbar {
-    background-color: $white;
-    border-bottom: $border;
-
+.navbar {
     position: fixed;
-    z-index: 1000;
     top: 0;
     left: 0;
+    z-index: 1000;
+    border-bottom: $border;
+    background-color: $white;
 
-    .toolbar-container {
+    .navbar__nav {
         width: 90%;
         margin: 0 auto;
         display: flex;
-        flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
-
-        button {
-            color: $pale-blue;
-        }
-
-        span {
-            color: $pale-blue;
-            font-size: 1.5rem;
-            letter-spacing: 0.2rem;
-        }
     }
-}
 
-@media (max-width: 768px) {
-    .toolbar {
-        span {
-            visibility: hidden;
-        }
+    .navbar__title,
+    .navbar__cart {
+        color: $black;
+    }
+
+    .navbar__title {
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3rem;
     }
 }

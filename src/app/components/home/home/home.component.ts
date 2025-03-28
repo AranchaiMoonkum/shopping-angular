@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core"
 import { ActivatedRoute } from "@angular/router"
+import { CartService } from "../../../services/cart.service"
 
 @Component({
     standalone: false,
@@ -19,7 +20,10 @@ export class HomeComponent implements OnInit {
         "women's clothing",
     ]
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(
+        private route: ActivatedRoute,
+        private cartService: CartService
+    ) {}
 
     ngOnInit(): void {
         this.route.data.subscribe((data: any) => {
@@ -60,5 +64,9 @@ export class HomeComponent implements OnInit {
     // convert rating to percentage
     getStarPercentage(rating: number): string {
         return `${(rating / 5) * 100}%`
+    }
+
+    addToCart(product: any) {
+        this.cartService.addToCart(product)
     }
 }

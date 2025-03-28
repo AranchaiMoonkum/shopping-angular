@@ -1,25 +1,14 @@
-<mat-sidenav-container class="sidenav-container" [hasBackdrop]="true">
-    <!-- sidebar -->
-    <mat-sidenav #sidenav mode="side" class="sidenav" [fixedInViewport]="true">
-        <mat-toolbar>Sidebar</mat-toolbar>
-        <mat-nav-list>
-            <a mat-list-item href="#">Home</a>
-            <a mat-list-item href="#">About</a>
-            <a mat-list-item href="#">Contact</a>
-        </mat-nav-list>
-    </mat-sidenav>
-
-    <!-- main content -->
-    <mat-sidenav-content>
-        <mat-toolbar class="toolbar">
-            <div class="toolbar-container">
-                <button mat-icon-button (click)="sidenav.toggle()">
-                    <mat-icon>menu</mat-icon>
-                </button>
-                <span>Shopping with Angular</span>
-            </div>
-        </mat-toolbar>
-
-        <app-home />
-    </mat-sidenav-content>
-</mat-sidenav-container>
+<mat-toolbar class="navbar">
+    <mat-toolbar-row class="navbar__nav">
+        <span class="navbar__title">Shopping Website</span>
+        <button mat-icon-button class="navbar__cart" routerLink="/cart">
+            <mat-icon
+                matBadge="{{ cartCount }}"
+                matBadgePosition="after"
+                matBadgeColor="accent"
+                aria-hidden="false"
+                >shopping_cart</mat-icon
+            >
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
