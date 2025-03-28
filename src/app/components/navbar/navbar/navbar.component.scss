@@ -1,0 +1,59 @@
+$black: #000;
+$white: #fff;
+$pale-white: #f1f1f1;
+$pale-blue: #0ea5e9;
+$yellow: #f4d914;
+$green: #2ecc71;
+$border: 2px solid $black;
+
+mat-sidenav-content {
+    min-height: 100vh;
+}
+
+.sidenav {
+    border-right: $border;
+    width: 250px;
+
+    mat-toolbar {
+        background-color: $pale-blue;
+        color: $white;
+        border-bottom: $border;
+    }
+}
+
+.toolbar {
+    background-color: $white;
+    border-bottom: $border;
+
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+
+    .toolbar-container {
+        width: 90%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: center;
+
+        button {
+            color: $pale-blue;
+        }
+
+        span {
+            color: $pale-blue;
+            font-size: 1.5rem;
+            letter-spacing: 0.2rem;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .toolbar {
+        span {
+            visibility: hidden;
+        }
+    }
+}

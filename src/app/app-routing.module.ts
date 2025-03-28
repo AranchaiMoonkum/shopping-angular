@@ -1,19 +1,18 @@
 import { NgModule } from "@angular/core"
 import { RouterModule, Routes } from "@angular/router"
 import { productResolver } from "./guards/product.resolver"
-import { HomeComponent } from "./components/home/home/home.component"
+import { NavbarComponent } from "./components/navbar/navbar/navbar.component"
 
 const routes: Routes = [
     {
         path: "",
-        component: HomeComponent,
-        resolve: { products: productResolver }
-    }
+        component: NavbarComponent,
+        resolve: { products: productResolver },
+    },
 ]
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+    exports: [RouterModule],
 })
-
-export class AppRoutingModule { }
+export class AppRoutingModule {}

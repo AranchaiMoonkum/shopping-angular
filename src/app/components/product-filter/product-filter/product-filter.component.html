@@ -1,26 +1,34 @@
 <div class="product-filter">
     <!-- filter by category -->
-    <label for="category">Category:</label>
-    <select
-        class="category-filter"
-        name="category"
-        id="category"
-        (change)="selectCategory($event)"
-        [value]="selectedCategory"
-    >
-        <option value="all">all categories</option>
-        <option *ngFor="let category of categories" [value]="category">
-            {{ category }}
-        </option>
-    </select>
+    <mat-form-field>
+        <mat-label for="category">Category:</mat-label>
+        <mat-select
+            [(ngModel)]="selectedCategory"
+            (ngModelChange)="onFilterChange()"
+        >
+            <mat-option value="all">All categories</mat-option>
+            <mat-option *ngFor="let category of categories" [value]="category">
+                {{ formatUpperCaseCategory(category) }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
 
     <!-- sort by -->
-    <label for="sort">Sort By:</label>
-    <select name="sort" id="sort" (change)="selectSort($event)">
-        <option value="none">no sorting</option>
-        <option value="price-low-to-high">low to high price</option>
-        <option value="price-high-to-low">high to low price</option>
-        <option value="rating-low-to-high">low to high rating</option>
-        <option value="rating-high-to-low">high to low rating</option>
-    </select>
+    <mat-form-field>
+        <mat-label for="sort">Sort By:</mat-label>
+        <mat-select
+            [(ngModel)]="selectedSort"
+            (ngModelChange)="onFilterChange()"
+        >
+            <mat-option value="none">No sorting</mat-option>
+            <mat-option value="price-low-to-high">Low to high price</mat-option>
+            <mat-option value="price-high-to-low">High to low price</mat-option>
+            <mat-option value="rating-low-to-high"
+                >Low to high rating</mat-option
+            >
+            <mat-option value="rating-high-to-low"
+                >High to low rating</mat-option
+            >
+        </mat-select>
+    </mat-form-field>
 </div>

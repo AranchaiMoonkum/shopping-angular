@@ -1,5 +1,6 @@
 // import components
 import { HomeComponent } from "./home/home.component"
+import { MatCardModule } from "@angular/material/card"
 
 // import modules
 import { NgModule } from "@angular/core"
@@ -10,10 +11,7 @@ import { ProductFilterModule } from "../product-filter/product-filter.module"
 
 @NgModule({
     declarations: [HomeComponent],
-    imports: [
-        CommonModule,
-        ProductFilterModule
-    ],
-    exports: [HomeComponent]
+    imports: [CommonModule, ProductFilterModule, MatCardModule],
+    exports: [HomeComponent],
 })
-export class HomeModule { }
+export class HomeModule {}

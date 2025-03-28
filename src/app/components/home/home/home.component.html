@@ -1,34 +1,46 @@
-<article class="header">
-    <h1 class="header__title">Shopping website</h1>
-</article>
-
-<section>
-    <app-product-filter
-        [categories]="categories"
-        [selectedCategory]="selectedCategory"
-        [selectedSort]="selectedSort"
-        (categorySelected)="filterProducts($event)"
-        (sortSelected)="sortProducts($event)"
-    >
-    </app-product-filter>
+<section class="header">
+    <div class="header__title">
+        <div>Shopping</div>
+        <div>with</div>
+        <div>Angular</div>
+    </div>
 </section>
 
-<div class="container">
-    <article *ngFor="let product of filteredProducts" class="product">
-        <a class="product__link">
-            <section class="product-header">
+<section class="filter-section">
+    <app-product-filter
+        [categories]="categories"
+        (filterChange)="applyFilters($event)"
+    ></app-product-filter>
+</section>
+
+<section class="marquee-wrapper">
+    <marquee class="marquee">
+        <span class="marquee__text"
+            >Welcome to our shopping website. We have a wide range of products
+            available for you.</span
+        >
+    </marquee>
+</section>
+
+<section class="product-section">
+    <div class="container">
+        <mat-card *ngFor="let product of filteredProducts" class="product">
+            <mat-card-header>
                 <img
                     class="product__image"
+                    mat-card-lg-image
                     src="{{ product.image }}"
                     alt="{{ product.title }}"
                 />
-            </section>
+            </mat-card-header>
 
-            <section class="product-body">
-                <p class="product__title">{{ product.title }}</p>
-                <p class="product__price product__paragraph">
-                    {{ product.price | currency }}
-                </p>
+            <mat-card-content>
+                <div class="product__details">
+                    <h2 class="product__title">{{ product.title }}</h2>
+                    <h2 class="product__category">{{ product.category }}</h2>
+                </div>
+                <p class="product__price">{{ product.price | currency }}</p>
+
                 <div class="star-rating">
                     <div
                         class="star-rating__filled"
@@ -37,7 +49,7 @@
                         }"
                     ></div>
                 </div>
-            </section>
-        </a>
-    </article>
-</div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</section>

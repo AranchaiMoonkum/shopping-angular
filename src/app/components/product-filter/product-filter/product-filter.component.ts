@@ -1,27 +1,42 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core"
+import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core"
 
 @Component({
     standalone: false,
     selector: "app-product-filter",
     templateUrl: "./product-filter.component.html",
-    styleUrl: "./product-filter.component.scss"
+    styleUrl: "./product-filter.component.scss",
 })
-
-export class ProductFilterComponent {
+export class ProductFilterComponent implements OnInit {
     @Input() categories: string[] = []
-    @Input() selectedCategory: string = "all"
-    @Input() selectedSort: string = "none"
+    @Output() filterChange = new EventEmitter<{
+        category: string
+        sort: string
+    }>()
 
-    @Output() categorySelected = new EventEmitter<string>()
-    @Output() sortSelected = new EventEmitter<string>()
+    selectedCategory: string = "all"
+    selectedSort: string = "none"
 
-    selectCategory(event: Event) {
-        const selectedValue = (event.target as HTMLSelectElement).value
-        this.categorySelected.emit(selectedValue)
+    ngOnInit(): void {
+        this.emitFilters()
     }
 
-    selectSort(event: Event) {
-        const selectedSortValue = (event.target as HTMLSelectElement).value
-        this.sortSelected.emit(selectedSortValue)
+    onFilterChange() {
+        this.filterChange.emit({
+            category: this.selectedCategory,
+            sort: this.selectedSort,
+        })
+    }
+
+    emitFilters() {
+        this.filterChange.emit({
+            category: this.selectedCategory,
+            sort: this.selectedSort,
+        })
+    }
+
+    formatUpperCaseCategory(category: string) {
+        return (
+            category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()
+        )
     }
 }
