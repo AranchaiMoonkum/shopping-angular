@@ -38,6 +38,14 @@
                         >
                             -
                         </button>
+                        <button
+                            mat-icon-button
+                            color="accent"
+                            (click)="onDelete(item)"
+                            matTooltip="Remove item from cart"
+                        >
+                            <mat-icon>delete</mat-icon>
+                        </button>
                     </div>
                 </section>
             </div>
@@ -46,6 +54,14 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="checkout-dialog__actions">
-    <span>Total price: {{ totalPrice | currency }}</span>
-    <button mat-button (click)="onClose()" color="accent">Close</button>
+    <h2>
+        Total price: <span>{{ totalPrice | currency }}</span>
+    </h2>
+
+    <section>
+        <button mat-button color="primary" (click)="checkoutItem()">
+            Checkout
+        </button>
+        <button mat-button (click)="onClose()" color="accent">Close</button>
+    </section>
 </mat-dialog-actions>

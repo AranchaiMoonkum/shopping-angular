@@ -123,10 +123,17 @@ mat-dialog-content {
 .checkout-dialog__actions {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: $pale-white;
+    padding: 0 1.5rem;
 
-    span {
+    h2 {
         font-size: 1.25rem;
-        font-weight: 500;
+        font-weight: 700;
+        margin: 0;
+
+        span {
+            font-weight: 400;
+        }
     }
 }

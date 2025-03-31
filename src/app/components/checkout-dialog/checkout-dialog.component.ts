@@ -12,6 +12,9 @@ import { CartItem } from "../../types/interface"
 import { MatButtonModule } from "@angular/material/button"
 import { CartService } from "../../services/cart.service"
 import { FormsModule } from "@angular/forms"
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar"
+import { MatIconModule } from "@angular/material/icon"
+import { MatTooltipModule } from "@angular/material/tooltip"
 
 @Component({
     standalone: true,
@@ -25,6 +28,9 @@ import { FormsModule } from "@angular/forms"
         MatDialogContent,
         MatButtonModule,
         FormsModule,
+        MatSnackBarModule,
+        MatIconModule,
+        MatTooltipModule,
     ],
 })
 export class CheckoutDialogComponent implements OnInit {
@@ -35,7 +41,8 @@ export class CheckoutDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA)
         public data: { cartItems: CartItem[]; totalPrice: number },
         private dialogRef: MatDialogRef<CheckoutDialogComponent>,
-        private cartService: CartService
+        private cartService: CartService,
+        private _snackBar: MatSnackBar
     ) {
         this.cartItems = data.cartItems.map((item) => ({
             ...item,
@@ -57,12 +64,28 @@ export class CheckoutDialogComponent implements OnInit {
         })
     }
 
-    updateQuantity(item: CartItem, change: number) {
+    updateQuantity(item: CartItem, change: number): void {
         this.cartService.updateItemQuantity(item.id, change)
         this.totalPrice = this.cartService.getTotalPrice()
     }
 
-    onClose() {
+    onClose(): void {
         this.dialogRef.close()
+    }
+
+    checkoutItem(): void {
+        this._snackBar.open("Checkout successful!", "Close", {
+            duration: 2000,
+        })
+    }
+
+    onDelete(item: CartItem): void {
+        this.cartService.updateItemQuantity(item.id, 0)
+        this.cartItems = this.cartItems.filter((i) => i.id !== item.id)
+        this.totalPrice = this.cartService.getTotalPrice()
+
+        this._snackBar.open("Item's removed from cart!", "Close", {
+            duration: 2000,
+        })
     }
 }
