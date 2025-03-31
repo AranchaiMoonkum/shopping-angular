@@ -9,9 +9,12 @@ export class CartService {
     private cartItems: CartItem[] = []
     private cartSubject = new BehaviorSubject<CartItem[]>([])
     private cartQuantitySubject = new BehaviorSubject<number>(0)
+    private cartTotalPriceSubject = new BehaviorSubject<number>(0)
 
+    // observable streams for cart items, cart quantity, and total price
     cart$ = this.cartSubject.asObservable()
     cartQuan$ = this.cartQuantitySubject.asObservable()
+    cartTotalPrice$ = this.cartTotalPriceSubject.asObservable()
 
     addToCart(product: CartItem) {
         const existingProduct = this.cartItems.find(
@@ -23,8 +26,10 @@ export class CartService {
         } else {
             this.cartItems.push({ ...product, quantity: 1 })
         }
+
         this.cartSubject.next(this.cartItems)
         this.updateCartQuantity()
+        this.updateTotalPrice()
     }
 
     getCartItems() {
@@ -38,6 +43,33 @@ export class CartService {
         )
 
         this.cartQuantitySubject.next(totalQuantity)
+    }
+
+    updateItemQuantity(productId: number, change: number) {
+        const item = this.cartItems.find((item) => item.id === item.id)
+
+        if (item) {
+            item.quantity += change
+
+            if (item.quantity <= 0) {
+                this.cartItems = this.cartItems.filter(
+                    (item) => item.id !== productId
+                ) // Remove item if quantity is 0
+            }
+        }
+
+        this.cartSubject.next(this.cartItems)
+        this.updateCartQuantity()
+        this.updateTotalPrice()
+    }
+
+    private updateTotalPrice() {
+        const totalPrice = this.cartItems.reduce(
+            (total, item) => total + item.price * item.quantity,
+            0
+        )
+
+        this.cartTotalPriceSubject.next(totalPrice)
     }
 
     getTotalPrice(): number {
