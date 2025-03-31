@@ -36,10 +36,6 @@ mat-dialog-content {
         gap: 0.5rem;
         padding-top: 1rem;
 
-        .cart-items__title {
-            margin-top: 1rem;
-        }
-
         .cart-items__title,
         .cart-items__price,
         .cart-items__quantity {
@@ -75,8 +71,15 @@ mat-dialog-content {
         .cart-items__details {
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
             align-items: center;
+
+            .cart-items__title {
+                flex: 1;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 200px;
+            }
 
             .cart-items__add,
             .cart-items__remove {
@@ -89,6 +92,29 @@ mat-dialog-content {
                 width: 25px;
                 height: 25px;
                 background-color: transparent;
+                flex-shrink: 0;
+            }
+
+            .cart-items__input {
+                width: 50px;
+                height: 25px;
+                text-align: center;
+                border: $border;
+                border-radius: 0;
+                background-color: $white;
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: $black;
+                outline: none;
+            }
+
+            &:first-child {
+                justify-content: space-between;
+            }
+
+            &:last-child {
+                justify-content: flex-end;
+                gap: 1rem;
             }
         }
     }

@@ -5,34 +5,40 @@
         <li *ngFor="let item of cartItems" class="cart-items__item">
             <div class="checkout-container">
                 <section class="checkout-wrapper">
-                    <img
-                        [src]="item.image"
-                        alt="{{ item.title }}"
-                        class="cart-items__image"
-                    />
                     <div class="cart-items__details">
+                        <img
+                            [src]="item.image"
+                            alt="{{ item.title }}"
+                            class="cart-items__image"
+                        />
                         <span class="cart-items__title">{{ item.title }}</span>
-                        <button
-                            class="cart-items__add"
-                            (click)="updateQuantity(item, 1)"
-                        >
-                            +
-                        </button>
-                    </div>
-                    <div class="cart-items__details">
                         <span class="cart-items__price">{{
                             item.price | currency
                         }}</span>
+                        <span class="cart-items__quantity"
+                            >Qty: {{ item.quantity }}</span
+                        >
+                    </div>
+                    <div class="cart-items__details">
+                        <button
+                            class="cart-items__add"
+                            (click)="updateQuantity(item, item.quantityChange)"
+                        >
+                            +
+                        </button>
+                        <input
+                            type="number"
+                            [(ngModel)]="item.quantityChange"
+                            min="1"
+                            class="cart-items__input"
+                        />
                         <button
                             class="cart-items__remove"
-                            (click)="updateQuantity(item, -1)"
+                            (click)="updateQuantity(item, -item.quantityChange)"
                         >
                             -
                         </button>
                     </div>
-                    <span class="cart-items__quantity"
-                        >Qty: {{ item.quantity }}</span
-                    >
                 </section>
             </div>
         </li>

@@ -11,6 +11,7 @@ import {
 import { CartItem } from "../../types/interface"
 import { MatButtonModule } from "@angular/material/button"
 import { CartService } from "../../services/cart.service"
+import { FormsModule } from "@angular/forms"
 
 @Component({
     standalone: true,
@@ -23,10 +24,11 @@ import { CartService } from "../../services/cart.service"
         MatDialogTitle,
         MatDialogContent,
         MatButtonModule,
+        FormsModule,
     ],
 })
 export class CheckoutDialogComponent implements OnInit {
-    cartItems: CartItem[] = []
+    cartItems: (CartItem & { quantityChange: number })[] = []
     totalPrice: number
 
     constructor(
@@ -35,13 +37,19 @@ export class CheckoutDialogComponent implements OnInit {
         private dialogRef: MatDialogRef<CheckoutDialogComponent>,
         private cartService: CartService
     ) {
-        this.cartItems = data.cartItems
+        this.cartItems = data.cartItems.map((item) => ({
+            ...item,
+            quantityChange: 1,
+        }))
         this.totalPrice = data.totalPrice
     }
 
     ngOnInit(): void {
         this.cartService.cart$.subscribe((item) => {
-            this.cartItems = item
+            this.cartItems = item.map((item) => ({
+                ...item,
+                quantityChange: 1,
+            }))
         })
 
         this.cartService.cartTotalPrice$.subscribe((price) => {
