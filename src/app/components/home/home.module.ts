@@ -9,6 +9,7 @@ import { NavbarModule } from "../navbar/navbar.module"
 // import angular material modules
 import { MatCardModule } from "@angular/material/card"
 import { MatIconModule } from "@angular/material/icon"
+import { MatSnackBarModule } from "@angular/material/snack-bar"
 
 // import functional components
 import { ProductFilterModule } from "../product-filter/product-filter.module"
@@ -20,6 +21,7 @@ import { ProductFilterModule } from "../product-filter/product-filter.module"
         ProductFilterModule,
         MatCardModule,
         MatIconModule,
+        MatSnackBarModule,
         NavbarModule,
     ],
     exports: [HomeComponent],

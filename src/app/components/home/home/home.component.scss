@@ -73,7 +73,7 @@ $border: 1px solid $black;
 .product {
     background: $pale-white;
     border-radius: 0;
-    box-shadow: 0 0 0 1px #000;
+    box-shadow: 0 0 0 1px $black;
     padding: 1rem;
 
     .product__image {
@@ -140,33 +140,6 @@ $border: 1px solid $black;
         margin-top: 1.4rem;
         font-weight: 400;
     }
-
-    // mat-card-content {
-    //     display: flex;
-    //     flex-direction: column;
-    //     justify-content: flex-start;
-    //     align-items: center;
-    //     text-align: left;
-    //     gap: 0.5rem;
-    //     padding-top: 3rem;
-    //     position: relative;
-    //     width: 100%;
-
-    //     .product__title {
-    //         font-size: 1.2rem;
-    //         font-weight: 500;
-    //         color: $black;
-    //     }
-
-    //     .product__title,
-    //     .product__price,
-    //     .star-rating {
-    //         align-self: flex-start;
-    //         width: 100%;
-    //         text-align: left;
-    //         font-size: 1rem;
-    //     }
-    // }
 
     .mat-mdc-card-header {
         justify-content: center;

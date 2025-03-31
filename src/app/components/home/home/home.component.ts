@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core"
 import { ActivatedRoute } from "@angular/router"
 import { CartService } from "../../../services/cart.service"
+import { MatSnackBar } from "@angular/material/snack-bar"
 
 @Component({
     standalone: false,
@@ -22,7 +23,8 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private cartService: CartService
+        private cartService: CartService,
+        private _snackBar: MatSnackBar
     ) {}
 
     ngOnInit(): void {
@@ -67,6 +69,10 @@ export class HomeComponent implements OnInit {
     }
 
     addToCart(product: any) {
+        this._snackBar.open("Added a product to cart now!", "Close", {
+            duration: 2000,
+        })
+
         this.cartService.addToCart(product)
     }
 }
