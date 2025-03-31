@@ -25,13 +25,20 @@ export class CartDialogComponent implements OnInit {
         this.cartService.cartQuan$.subscribe((quan) => {
             this.cartCount = quan
         })
+
+        this.cartService.cartTotalPrice$.subscribe((price) => {
+            this.totalPrice = price
+        })
     }
 
     openDialog() {
         this.dialog.open(CheckoutDialogComponent, {
-            width: "400px",
-            height: "400px",
-            data: { cartItems: this.cartItems },
+            width: "600px",
+            height: "600px",
+            data: {
+                cartItems: this.cartItems,
+                totalPrice: this.totalPrice,
+            },
         })
     }
 }

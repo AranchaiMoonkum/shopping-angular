@@ -1,7 +1,21 @@
 <h2 mat-dialog-title>Hello World</h2>
 
-<mat-dialog-content> </mat-dialog-content>
+<mat-dialog-content>
+    <ul class="cart-items">
+        <li *ngFor="let item of cartItems" class="cart-items__item">
+            <img
+                [src]="item.image"
+                alt="{{ item.title }}"
+                class="cart-items__image"
+            />
+            <span class="cart-items__title">{{ item.title }}</span>
+            <span class="cart-items__price">{{ item.price | currency }}</span>
+            <span class="cart-items__quantity">Qty: {{ item.quantity }}</span>
+        </li>
+    </ul>
+</mat-dialog-content>
 
-<mat-dialog-actions align="end">
-    <button mat-button (click)="onClose()">Close</button>
+<mat-dialog-actions align="end" class="checkout-dialog__actions">
+    <span>Total price: {{ totalPrice | currency }}</span>
+    <button mat-button (click)="onClose()" color="accent">Close</button>
 </mat-dialog-actions>
