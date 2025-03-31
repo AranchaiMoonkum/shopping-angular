@@ -11,7 +11,11 @@
                             alt="{{ item.title }}"
                             class="cart-items__image"
                         />
-                        <span class="cart-items__title">{{ item.title }}</span>
+                        <span
+                            class="cart-items__title"
+                            matTooltip="{{ item.title }}"
+                            >{{ item.title }}</span
+                        >
                         <span class="cart-items__price">{{
                             item.price | currency
                         }}</span>
@@ -20,31 +24,35 @@
                         >
                     </div>
                     <div class="cart-items__details">
+                        <section class="cart-items__quantity-change">
+                            <button
+                                class="cart-items__add"
+                                (click)="
+                                    updateQuantity(item, item.quantityChange)
+                                "
+                            >
+                                +
+                            </button>
+                            <input
+                                type="number"
+                                [(ngModel)]="item.quantityChange"
+                                min="1"
+                                class="cart-items__input"
+                            />
+                            <button
+                                class="cart-items__remove"
+                                (click)="
+                                    updateQuantity(item, -item.quantityChange)
+                                "
+                            >
+                                -
+                            </button>
+                        </section>
                         <button
-                            class="cart-items__add"
-                            (click)="updateQuantity(item, item.quantityChange)"
-                        >
-                            +
-                        </button>
-                        <input
-                            type="number"
-                            [(ngModel)]="item.quantityChange"
-                            min="1"
-                            class="cart-items__input"
-                        />
-                        <button
-                            class="cart-items__remove"
-                            (click)="updateQuantity(item, -item.quantityChange)"
-                        >
-                            -
-                        </button>
-                        <button
-                            mat-icon-button
-                            color="accent"
                             (click)="onDelete(item)"
-                            matTooltip="Remove item from cart"
+                            class="cart-items__delete"
                         >
-                            <mat-icon>delete</mat-icon>
+                            Remove
                         </button>
                     </div>
                 </section>
