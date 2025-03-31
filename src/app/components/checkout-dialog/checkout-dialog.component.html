@@ -10,10 +10,16 @@
                         alt="{{ item.title }}"
                         class="cart-items__image"
                     />
-                    <span class="cart-items__title">{{ item.title }}</span>
-                    <span class="cart-items__price">{{
-                        item.price | currency
-                    }}</span>
+                    <div class="cart-items__details">
+                        <span class="cart-items__title">{{ item.title }}</span>
+                        <button class="cart-items__add">+</button>
+                    </div>
+                    <div class="cart-items__details">
+                        <span class="cart-items__price">{{
+                            item.price | currency
+                        }}</span>
+                        <button class="cart-items__remove">-</button>
+                    </div>
                     <span class="cart-items__quantity"
                         >Qty: {{ item.quantity }}</span
                     >

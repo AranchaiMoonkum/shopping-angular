@@ -71,6 +71,26 @@ mat-dialog-content {
             display: flex;
             flex-direction: column;
         }
+
+        .cart-items__details {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            .cart-items__add,
+            .cart-items__remove {
+                border: 1px solid #000;
+                transition: all 0.15s ease-in-out;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 25px;
+                height: 25px;
+                background-color: transparent;
+            }
+        }
     }
 }
 
