@@ -1,5 +1,4 @@
-import { Component, OnInit } from "@angular/core"
-import { CartService } from "../../../services/cart.service"
+import { Component } from "@angular/core"
 
 @Component({
     standalone: false,
@@ -7,18 +6,6 @@ import { CartService } from "../../../services/cart.service"
     templateUrl: "./navbar.component.html",
     styleUrl: "./navbar.component.scss",
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
     showFiller = false
-    cartItems: any[] = []
-    cartCount: number = 0
-
-    constructor(private cartService: CartService) {}
-
-    ngOnInit(): void {
-        this.cartItems = this.cartService.getCartItems()
-
-        this.cartService.cartCount$.subscribe((count) => {
-            this.cartCount = count
-        })
-    }
 }

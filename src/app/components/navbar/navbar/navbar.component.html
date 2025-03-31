@@ -1,14 +1,6 @@
 <mat-toolbar class="navbar">
     <mat-toolbar-row class="navbar__nav">
         <span class="navbar__title">Shopping Website</span>
-        <button mat-icon-button class="navbar__cart" routerLink="/cart">
-            <mat-icon
-                matBadge="{{ cartCount }}"
-                matBadgePosition="after"
-                matBadgeColor="accent"
-                aria-hidden="false"
-                >shopping_cart</mat-icon
-            >
-        </button>
+        <app-cart-dialog></app-cart-dialog>
     </mat-toolbar-row>
 </mat-toolbar>
