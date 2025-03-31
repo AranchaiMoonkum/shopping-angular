@@ -6,36 +6,15 @@ $yellow: #f4d914;
 $green: #2ecc71;
 $border: 1px solid $black;
 
-.header {
-    background-color: $white;
-    margin-top: 5rem;
-
-    .header__title {
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        grid-template-rows: repeat(3, 1fr);
-
-        & > div {
-            padding-left: 1.5rem;
-            color: $pale-blue;
-            font-size: 7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 5rem;
-        }
-    }
-}
-
 .filter-section {
-    background: $pale-blue;
-    border-top: $border;
-    padding: 2rem 0rem 1rem 0rem;
+    background: $white;
+    margin-top: 65px;
+    padding: 2rem 0 1rem 0;
 }
 
 .marquee-wrapper {
     border-top: $border;
-    padding: 1.2rem 0;
+    padding: 0.5rem 0;
     background-color: $white;
 
     .marquee {
@@ -48,8 +27,8 @@ $border: 1px solid $black;
         margin-top: 0.2rem;
 
         .marquee__text {
-            padding: 0 2rem;
-            font-size: 1.5rem;
+            padding: 0 1rem;
+            font-size: 0.875rem;
             color: $black;
             text-transform: uppercase;
             letter-spacing: 0.2rem;
@@ -71,7 +50,7 @@ $border: 1px solid $black;
 }
 
 .product {
-    background: $pale-white;
+    background: $white;
     border-radius: 0;
     box-shadow: 0 0 0 1px $black;
     padding: 1rem;
@@ -113,6 +92,7 @@ $border: 1px solid $black;
         }
 
         .product-add__button {
+            background-color: $white;
             border-radius: 0;
             border: $border;
             transition: all 0.15s ease-in-out;
