@@ -67,6 +67,8 @@ export class CheckoutDialogComponent implements OnInit {
     updateQuantity(item: CartItem, change: number): void {
         this.cartService.updateItemQuantity(item.id, change)
         this.totalPrice = this.cartService.getTotalPrice()
+
+        console.log("Updated quantity:", item.id, change)
     }
 
     onClose(): void {

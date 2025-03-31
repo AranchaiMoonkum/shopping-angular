@@ -19,30 +19,28 @@
                         <span class="cart-items__price">{{
                             item.price | currency
                         }}</span>
-                        <span class="cart-items__quantity"
-                            >Qty: {{ item.quantity }}</span
-                        >
                     </div>
                     <div class="cart-items__details">
                         <section class="cart-items__quantity-change">
                             <button
                                 class="cart-items__add"
                                 (click)="
-                                    updateQuantity(item, item.quantityChange)
+                                    updateQuantity(item, item.quantity + 1)
                                 "
                             >
                                 +
                             </button>
                             <input
                                 type="number"
-                                [(ngModel)]="item.quantityChange"
-                                min="1"
+                                [(ngModel)]="item.quantity"
+                                (change)="updateQuantity(item, item.quantity)"
                                 class="cart-items__input"
+                                min="1"
                             />
                             <button
                                 class="cart-items__remove"
                                 (click)="
-                                    updateQuantity(item, -item.quantityChange)
+                                    updateQuantity(item, item.quantity - 1)
                                 "
                             >
                                 -

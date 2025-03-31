@@ -46,15 +46,15 @@ export class CartService {
     }
 
     updateItemQuantity(productId: number, change: number) {
-        const item = this.cartItems.find((item) => item.id === item.id)
+        const item = this.cartItems.find((item) => item.id === productId)
 
         if (item) {
-            item.quantity += change
+            item.quantity = change
 
             if (item.quantity <= 0) {
                 this.cartItems = this.cartItems.filter(
                     (item) => item.id !== productId
-                ) // Remove item if quantity is 0
+                )
             }
         }
 
