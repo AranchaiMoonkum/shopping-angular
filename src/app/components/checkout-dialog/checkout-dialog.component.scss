@@ -151,8 +151,19 @@ mat-dialog-content {
     padding: 0 1.5rem;
 
     h2 {
-        font-size: 1.25rem;
-        font-weight: 500;
+        font-size: 0.875rem;
+        font-weight: 400;
         margin: 0;
+    }
+}
+
+@media (max-width: 375px) {
+    .cart-items__details {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+
+    .cart-items__details--quantity {
+        margin-top: 0.5rem !important;
     }
 }
