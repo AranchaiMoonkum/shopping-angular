@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common"
-import { Component, Inject } from "@angular/core"
+import { Component, Inject, OnInit } from "@angular/core"
 
 import {
     MatDialogModule,
@@ -10,6 +10,7 @@ import {
 } from "@angular/material/dialog"
 import { CartItem } from "../../types/interface"
 import { MatButtonModule } from "@angular/material/button"
+import { CartService } from "../../services/cart.service"
 
 @Component({
     standalone: true,
@@ -24,17 +25,33 @@ import { MatButtonModule } from "@angular/material/button"
         MatButtonModule,
     ],
 })
-export class CheckoutDialogComponent {
+export class CheckoutDialogComponent implements OnInit {
     cartItems: CartItem[] = []
     totalPrice: number
 
     constructor(
-        public dialogRef: MatDialogRef<CheckoutDialogComponent>,
         @Inject(MAT_DIALOG_DATA)
-        public data: { cartItems: CartItem[]; totalPrice: number }
+        public data: { cartItems: CartItem[]; totalPrice: number },
+        private dialogRef: MatDialogRef<CheckoutDialogComponent>,
+        private cartService: CartService
     ) {
         this.cartItems = data.cartItems
         this.totalPrice = data.totalPrice
+    }
+
+    ngOnInit(): void {
+        this.cartService.cart$.subscribe((item) => {
+            this.cartItems = item
+        })
+
+        this.cartService.cartTotalPrice$.subscribe((price) => {
+            this.totalPrice = price
+        })
+    }
+
+    updateQuantity(item: CartItem, change: number) {
+        this.cartService.updateItemQuantity(item.id, change)
+        this.totalPrice = this.cartService.getTotalPrice()
     }
 
     onClose() {
