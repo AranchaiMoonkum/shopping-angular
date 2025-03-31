@@ -65,10 +65,23 @@ export class CheckoutDialogComponent implements OnInit {
     }
 
     updateQuantity(item: CartItem, change: number): void {
+        const maximumQuantity = 99
+
+        if (change < 1) {
+            this._snackBar.open("Removed product from the cart", "Close", {
+                duration: 2000,
+            })
+        }
+
+        if (change >= maximumQuantity) {
+            change = maximumQuantity
+
+            this._snackBar.open("Maximum quantity is 99", "Close", {
+                duration: 2000,
+            })
+        }
         this.cartService.updateItemQuantity(item.id, change)
         this.totalPrice = this.cartService.getTotalPrice()
-
-        console.log("Updated quantity:", item.id, change)
     }
 
     onClose(): void {
@@ -86,7 +99,7 @@ export class CheckoutDialogComponent implements OnInit {
         this.cartItems = this.cartItems.filter((i) => i.id !== item.id)
         this.totalPrice = this.cartService.getTotalPrice()
 
-        this._snackBar.open("Item's removed from cart!", "Close", {
+        this._snackBar.open("Removed product from the cart", "Close", {
             duration: 2000,
         })
     }

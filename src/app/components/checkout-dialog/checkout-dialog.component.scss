@@ -101,6 +101,8 @@ mat-dialog-content {
                 .cart-items__add,
                 .cart-items__remove {
                     transition: all 0.15s ease-in-out;
+                    border-left: 1px solid $black;
+                    border-right: 1px solid $black;
                     cursor: pointer;
                     width: 25px;
                     height: 25px;
