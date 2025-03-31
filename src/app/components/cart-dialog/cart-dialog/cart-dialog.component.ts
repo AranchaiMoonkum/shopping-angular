@@ -31,6 +31,7 @@ export class CartDialogComponent implements OnInit {
         this.dialog.open(CheckoutDialogComponent, {
             width: "400px",
             height: "400px",
+            data: { cartItems: this.cartItems },
         })
     }
 }
