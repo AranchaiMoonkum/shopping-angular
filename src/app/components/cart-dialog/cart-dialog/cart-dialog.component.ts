@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core"
 import { CartService } from "../../../services/cart.service"
 import { MatDialog } from "@angular/material/dialog"
 import { CartItem } from "../../../types/interface"
+import { CheckoutDialogComponent } from "../../checkout-dialog/checkout-dialog.component"
 
 @Component({
     standalone: false,
@@ -23,6 +24,13 @@ export class CartDialogComponent implements OnInit {
 
         this.cartService.cartQuan$.subscribe((quan) => {
             this.cartCount = quan
+        })
+    }
+
+    openDialog() {
+        this.dialog.open(CheckoutDialogComponent, {
+            width: "400px",
+            height: "400px",
         })
     }
 }

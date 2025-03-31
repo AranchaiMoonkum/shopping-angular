@@ -15,6 +15,7 @@ import {
     MatDialogModule,
     MatDialogTitle,
 } from "@angular/material/dialog"
+import { CheckoutDialogComponent } from "../checkout-dialog/checkout-dialog.component"
 
 @NgModule({
     declarations: [CartDialogComponent],
@@ -27,6 +28,8 @@ import {
         MatDialogContent,
         MatDialogTitle,
         MatDialogActions,
+
+        CheckoutDialogComponent,
     ],
     exports: [CartDialogComponent],
 })
