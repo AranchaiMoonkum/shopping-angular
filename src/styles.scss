@@ -39,6 +39,17 @@ body {
     border: 1px solid $black;
 }
 
+.mat-mdc-dialog-container .mdc-dialog__surface {
+    overflow: hidden !important;
+
+    &::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
 .mdc-text-field--outlined:not(.mdc-text-field--disabled)
     .mdc-notched-outline
     .mdc-notched-outline__leading,
