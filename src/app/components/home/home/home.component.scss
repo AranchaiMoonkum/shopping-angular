@@ -1,10 +1,4 @@
-$black: #000;
-$white: #fff;
-$pale-white: #f1f1f1;
-$pale-blue: #0ea5e9;
-$yellow: #f4d914;
-$green: #2ecc71;
-$border: 1px solid $black;
+@use "../../../_variables.scss" as *;
 
 .filter-section {
     background: $white;
@@ -59,7 +53,6 @@ $border: 1px solid $black;
         width: 100%;
         height: 200px;
         object-fit: contain;
-        mix-blend-mode: multiply;
         transition: all 0.15s ease-in-out;
     }
 
@@ -151,6 +144,19 @@ $border: 1px solid $black;
             content: "★★★★★";
         }
     }
+}
+
+// highlight background when add product to cart
+.one-item__highlighted {
+    background-color: $pale-blue;
+    color: $white;
+    border: none !important;
+}
+
+.many-items__highlighted {
+    background-color: $black;
+    color: $white;
+    border: none !important;
 }
 
 /* media queries */
