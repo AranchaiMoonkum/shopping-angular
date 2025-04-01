@@ -10,23 +10,35 @@
     border-top: $border;
     padding: 0.5rem 0;
     background-color: $white;
+    overflow: hidden;
+    width: 100%;
 
     .marquee {
+        position: relative;
         display: flex;
-        justify-content: center;
         align-items: center;
         overflow: hidden;
         white-space: nowrap;
-        animation: marquee 15s linear infinite;
         margin-top: 0.2rem;
+        width: 100%;
+    }
 
-        .marquee__text {
-            padding: 0 1rem;
-            font-size: 0.875rem;
-            color: $black;
-            text-transform: uppercase;
-            letter-spacing: 0.2rem;
-        }
+    .marquee__text {
+        padding: 0 1rem;
+        font-size: 0.875rem;
+        color: $black;
+        text-transform: uppercase;
+        animation: marquee 40s linear infinite;
+        letter-spacing: 0.2rem;
+    }
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(200%);
+    }
+    100% {
+        transform: translateX(-100%);
     }
 }
 
@@ -88,7 +100,6 @@
             background-color: $white;
             border-radius: 0;
             border: $border;
-            transition: all 0.15s ease-in-out;
             cursor: pointer;
             display: flex;
             justify-content: center;
@@ -147,16 +158,44 @@
 }
 
 // highlight background when add product to cart
+.one-item__highlighted,
+.many-items__highlighted {
+    border: none !important;
+}
+
 .one-item__highlighted {
     background-color: $pale-blue;
     color: $white;
-    border: none !important;
+    box-shadow: 0 0 0 1px $white;
+
+    .product-add__button {
+        background-color: $pale-blue !important;
+        border: 1px solid $white !important;
+        color: $white !important;
+
+        &:hover {
+            background-color: $white !important;
+            color: $pale-blue !important;
+            border: 1px solid $white !important;
+        }
+    }
 }
 
 .many-items__highlighted {
     background-color: $black;
     color: $white;
-    border: none !important;
+    box-shadow: 0 0 0 1px $white;
+
+    .product-add__button {
+        background-color: $black !important;
+        color: $white;
+        border: 1px solid $white !important;
+
+        &:hover {
+            background: $white !important;
+            color: $black !important;
+        }
+    }
 }
 
 /* media queries */
