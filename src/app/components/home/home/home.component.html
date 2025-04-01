@@ -18,7 +18,14 @@
 
 <section class="product-section">
     <div class="container">
-        <mat-card *ngFor="let product of filteredProducts" class="product">
+        <mat-card
+            *ngFor="let product of filteredProducts"
+            class="product"
+            [ngClass]="{
+                'one-item__highlighted': isItemInCart(product.id) === 1,
+                'many-items__highlighted': isItemInCart(product.id) > 1
+            }"
+        >
             <mat-card-header>
                 <img
                     class="product__image"

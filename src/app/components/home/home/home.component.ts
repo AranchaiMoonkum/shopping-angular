@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core"
 import { ActivatedRoute } from "@angular/router"
 import { CartService } from "../../../services/cart.service"
 import { MatSnackBar } from "@angular/material/snack-bar"
+import { CartItem } from "../../../types/interface"
 
 @Component({
     standalone: false,
@@ -12,6 +13,7 @@ import { MatSnackBar } from "@angular/material/snack-bar"
 export class HomeComponent implements OnInit {
     products: any[] = []
     filteredProducts: any[] = []
+    cartItem: CartItem[] = []
 
     // filter and sort options
     categories: string[] = [
@@ -36,6 +38,11 @@ export class HomeComponent implements OnInit {
                 this.products = []
                 this.filteredProducts = [...this.products]
             }
+        })
+
+        // subscribe to cart service to get the cart items
+        this.cartService.cart$.subscribe((item) => {
+            this.cartItem = item
         })
     }
 
@@ -74,5 +81,11 @@ export class HomeComponent implements OnInit {
         })
 
         this.cartService.addToCart(product)
+    }
+
+    // check if there is a product in the cart or not
+    isItemInCart(productId: number): number {
+        const products = this.cartItem.find((item) => item.id === productId)
+        return products ? products.quantity : 0
     }
 }
