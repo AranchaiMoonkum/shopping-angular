@@ -4,7 +4,16 @@
             <span class="navbar__title">Shopping Website</span>
         </div>
         <section class="navbar-right">
-            <app-cart-dialog class="navbar__dialog"></app-cart-dialog>
+            <button (click)="openDialog()" mat-icon-button>
+                <mat-icon
+                    matBadge="{{ totalQuantity$ | async }}"
+                    matBadgePosition="after"
+                    matBadgeColor="accent"
+                    aria-hidden="false"
+                >
+                    shopping_cart
+                </mat-icon>
+            </button>
         </section>
     </mat-toolbar-row>
 </mat-toolbar>

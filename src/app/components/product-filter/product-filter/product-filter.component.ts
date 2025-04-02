@@ -10,11 +10,11 @@ export class ProductFilterComponent implements OnInit {
     @Input() categories: string[] = []
     @Output() filterChange = new EventEmitter<{
         category: string
-        sort: string
+        sort: "asc" | "desc" | "none"
     }>()
 
     selectedCategory: string = "all"
-    selectedSort: string = "none"
+    selectedSort: "asc" | "desc" | "none" = "none"
 
     ngOnInit(): void {
         this.emitFilters()

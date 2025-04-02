@@ -2,28 +2,28 @@
 
 <mat-dialog-content>
     <div class="cart-items">
-        <li *ngFor="let item of cartItems" class="cart-items__item">
+        <li *ngFor="let product of cart$ | async" class="cart-items__item">
             <div class="checkout-container">
                 <section class="checkout-wrapper">
                     <div class="cart-items__details">
                         <img
-                            [src]="item.image"
-                            alt="{{ item.title }}"
+                            [src]="product.image"
+                            alt="{{ product.title }}"
                             class="cart-items__image"
                         />
                         <span
                             class="cart-items__title"
-                            matTooltip="{{ item.title }}"
-                            >{{ item.title }}</span
+                            matTooltip="{{ product.title }}"
+                            >{{ product.title }}</span
                         >
                         <span class="cart-items__price">{{
-                            item.price | currency
+                            product.price | currency
                         }}</span>
                     </div>
                     <div
                         class="cart-items__details cart-items__details--quantity"
                     >
-                        <section class="cart-items__quantity-change">
+                        <!-- <section class="cart-items__quantity-change">
                             <button
                                 class="cart-items__add"
                                 (click)="
@@ -35,7 +35,7 @@
                             <input
                                 type="number"
                                 [(ngModel)]="item.quantity"
-                                (change)="updateQuantity(item, item.quantity)"
+                                (change)="removeProductFromCart(item)"
                                 class="cart-items__input"
                                 min="1"
                             />
@@ -47,9 +47,9 @@
                             >
                                 -
                             </button>
-                        </section>
+                        </section> -->
                         <button
-                            (click)="onDelete(item)"
+                            (click)="removeProductFromCart(product)"
                             class="cart-items__delete"
                         >
                             Remove
@@ -63,13 +63,13 @@
 
 <mat-dialog-actions align="end" class="checkout-dialog__actions">
     <h2>
-        Total price: <span>{{ totalPrice | currency }}</span>
+        Total price: <span>{{ totalPrice$ | async | currency }}</span>
     </h2>
 
-    <section>
+    <!-- <section>
         <button mat-button color="primary" (click)="checkoutItem()">
             Checkout
         </button>
         <button mat-button (click)="onClose()" color="accent">Close</button>
-    </section>
+    </section> -->
 </mat-dialog-actions>

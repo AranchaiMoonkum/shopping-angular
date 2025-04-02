@@ -10,7 +10,6 @@ import { MatButtonModule } from "@angular/material/button"
 import { MatIconModule } from "@angular/material/icon"
 import { MatToolbarModule } from "@angular/material/toolbar"
 import { MatBadgeModule } from "@angular/material/badge"
-import { CartDialogModule } from "../cart-dialog/cart-dialog.module"
 
 @NgModule({
     declarations: [NavbarComponent],
@@ -21,8 +20,6 @@ import { CartDialogModule } from "../cart-dialog/cart-dialog.module"
         MatIconModule,
         MatToolbarModule,
         MatBadgeModule,
-
-        CartDialogModule,
     ],
     exports: [NavbarComponent],
 })

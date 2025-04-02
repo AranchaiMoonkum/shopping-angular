@@ -3,7 +3,7 @@
 <section class="filter-section">
     <app-product-filter
         [categories]="categories"
-        (filterChange)="applyFilters($event)"
+        (filterChange)="filterAndSortProducts($event)"
     ></app-product-filter>
 </section>
 
@@ -19,12 +19,11 @@
 <section class="product-section">
     <div class="container">
         <mat-card
-            *ngFor="let product of filteredProducts"
+            *ngFor="
+                let product of filterProducts$ | async;
+                trackBy: trackByProductId
+            "
             class="product"
-            [ngClass]="{
-                'one-item__highlighted': isItemInCart(product.id) === 1,
-                'many-items__highlighted': isItemInCart(product.id) > 1
-            }"
         >
             <mat-card-header>
                 <img

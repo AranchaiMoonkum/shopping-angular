@@ -134,7 +134,7 @@
         display: flex;
         align-items: center;
         font-size: 24px;
-        color: #aaa;
+        color: $pale-white;
         letter-spacing: 2px;
 
         &::before {
@@ -147,53 +147,12 @@
             left: 0;
             overflow: hidden;
             white-space: nowrap;
-            width: 0%;
             color: $yellow;
+            width: 0%;
         }
 
         .star-rating__filled::before {
             content: "★★★★★";
-        }
-    }
-}
-
-// highlight background when add product to cart
-.one-item__highlighted,
-.many-items__highlighted {
-    border: none !important;
-}
-
-.one-item__highlighted {
-    background-color: $pale-blue;
-    color: $white;
-    box-shadow: 0 0 0 1px $white;
-
-    .product-add__button {
-        background-color: $pale-blue !important;
-        border: 1px solid $white !important;
-        color: $white !important;
-
-        &:hover {
-            background-color: $white !important;
-            color: $pale-blue !important;
-            border: 1px solid $white !important;
-        }
-    }
-}
-
-.many-items__highlighted {
-    background-color: $black;
-    color: $white;
-    box-shadow: 0 0 0 1px $white;
-
-    .product-add__button {
-        background-color: $black !important;
-        color: $white;
-        border: 1px solid $white !important;
-
-        &:hover {
-            background: $white !important;
-            color: $black !important;
         }
     }
 }

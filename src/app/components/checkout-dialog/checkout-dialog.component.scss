@@ -146,8 +146,12 @@ mat-dialog-content {
 
     h2 {
         font-size: 0.875rem;
-        font-weight: 400;
+        font-weight: 500;
         margin: 0;
+
+        span {
+            font-weight: 400;
+        }
     }
 }
 

@@ -1,81 +1,60 @@
 import { Injectable } from "@angular/core"
-import { BehaviorSubject } from "rxjs"
-import { CartItem } from "../types/interface"
+import { BehaviorSubject, map, Observable } from "rxjs"
+import { Product } from "../types/interface"
 
 @Injectable({
     providedIn: "root",
 })
 export class CartService {
-    private cartItems: CartItem[] = []
-    private cartSubject = new BehaviorSubject<CartItem[]>([])
-    private cartQuantitySubject = new BehaviorSubject<number>(0)
-    private cartTotalPriceSubject = new BehaviorSubject<number>(0)
+    private readonly cartSubject = new BehaviorSubject<Product[]>([])
 
-    // observable streams for cart items, cart quantity, and total price
-    cart$ = this.cartSubject.asObservable()
-    cartQuan$ = this.cartQuantitySubject.asObservable()
-    cartTotalPrice$ = this.cartTotalPriceSubject.asObservable()
+    readonly totalQuantity$: Observable<number> = this.cartSubject.pipe(
+        map((cart) => cart.reduce((acc, product) => acc + product.quantity, 0))
+    )
 
-    addToCart(product: CartItem) {
-        const existingProduct = this.cartItems.find(
-            (item) => item.id === product.id
+    readonly totalPrice$: Observable<number> = this.cartSubject.pipe(
+        map((cart) =>
+            cart.reduce(
+                (acc, product) => acc + product.price * product.quantity,
+                0
+            )
         )
+    )
 
-        if (existingProduct) {
-            existingProduct.quantity++
-        } else {
-            this.cartItems.push({ ...product, quantity: 1 })
-        }
-
-        this.cartSubject.next(this.cartItems)
-        this.updateCartQuantity()
-        this.updateTotalPrice()
+    // get data from the cart observable
+    getCart() {
+        return this.cartSubject.asObservable()
     }
 
-    getCartItems() {
-        return this.cartItems
+    // add product to the cart
+    addProductToCart(product: Product) {
+        const cart = [...this.cartSubject.value] // get the current cart value as an array
+        const existingProduct = cart.find((p) => p.id === product.id) // check if the product is already in the cart
+
+        // update the cart with the new product or increase the quantity of the existing product
+        const updatedCart = existingProduct
+            ? cart.map((p) =>
+                  p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
+              )
+            : [...cart, { ...product, quantity: 1 }]
+
+        this.cartSubject.next(updatedCart) // emit the updated cart to subscribers
     }
 
-    private updateCartQuantity() {
-        const totalQuantity = this.cartItems.reduce(
-            (acc, item) => acc + item.quantity,
-            0
-        )
+    // remove a product from the cart
+    removeProductFromCart(product: Product): void {
+        const updatedCart = this.cartSubject.value
+            .map((p) =>
+                p.id === product.id && p.quantity >= 1
+                    ? { ...p, quantity: p.quantity - 1 }
+                    : p
+            )
+            .filter((p) => p.quantity > 0) // remove products with quantity 0
 
-        this.cartQuantitySubject.next(totalQuantity)
+        this.cartSubject.next(updatedCart) // emit the updated cart to subscribers
     }
 
-    updateItemQuantity(productId: number, change: number) {
-        const item = this.cartItems.find((item) => item.id === productId)
-
-        if (item) {
-            item.quantity = change
-
-            if (item.quantity <= 0) {
-                this.cartItems = this.cartItems.filter(
-                    (item) => item.id !== productId
-                )
-            }
-        }
-
-        this.cartSubject.next(this.cartItems)
-        this.updateCartQuantity()
-        this.updateTotalPrice()
-    }
-
-    private updateTotalPrice() {
-        const totalPrice = this.cartItems.reduce(
-            (total, item) => total + item.price * item.quantity,
-            0
-        )
-
-        this.cartTotalPriceSubject.next(totalPrice)
-    }
-
-    getTotalPrice(): number {
-        return this.cartItems.reduce(
-            (total, item) => total + item.price * item.quantity,
-            0
-        )
+    clearCart() {
+        this.cartSubject.next([])
     }
 }

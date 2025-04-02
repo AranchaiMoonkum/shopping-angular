@@ -6,11 +6,9 @@ import { Observable } from "rxjs"
     providedIn: "root",
 })
 export class ApiService {
-    private readonly apiUrl = "https://fakestoreapi.com/products"
-
     constructor(private http: HttpClient) {}
 
-    getProducts(): Observable<any> {
-        return this.http.get<any[]>(this.apiUrl)
+    get<T>(url: string): Observable<T> {
+        return this.http.get<T>(url)
     }
 }

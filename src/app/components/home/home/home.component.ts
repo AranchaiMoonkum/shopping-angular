@@ -1,21 +1,31 @@
-import { Component, OnInit } from "@angular/core"
-import { ActivatedRoute } from "@angular/router"
-import { CartService } from "../../../services/cart.service"
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core"
+import { ProductService } from "../../../services/product.service"
+import { Product } from "../../../types/interface"
 import { MatSnackBar } from "@angular/material/snack-bar"
-import { CartItem } from "../../../types/interface"
+import { CartService } from "../../../services/cart.service"
+import { Observable } from "rxjs"
 
 @Component({
-    standalone: false,
     selector: "app-home",
     templateUrl: "./home.component.html",
     styleUrl: "./home.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit {
-    products: any[] = []
-    filteredProducts: any[] = []
-    cartItem: CartItem[] = []
+export class HomeComponent {
+    // the constructor injects the ProductService to fetch products data
+    constructor(
+        private productService: ProductService,
+        private cartService: CartService,
+        private _snackBar: MatSnackBar
+    ) {}
 
-    // filter and sort options
+    filterProducts$: Observable<Product[]> =
+        this.productService.getFilteredProducts()
+
+    selectedCategory: string = "all"
+    selectedSort: "asc" | "desc" | "none" = "none"
+
+    // categories is an array of strings
     categories: string[] = [
         "men's clothing",
         "jewelery",
@@ -23,69 +33,31 @@ export class HomeComponent implements OnInit {
         "women's clothing",
     ]
 
-    constructor(
-        private route: ActivatedRoute,
-        private cartService: CartService,
-        private _snackBar: MatSnackBar
-    ) {}
-
-    ngOnInit(): void {
-        this.route.data.subscribe((data: any) => {
-            if (Array.isArray(data["products"])) {
-                this.products = data["products"]
-                this.filteredProducts = [...this.products]
-            } else {
-                this.products = []
-                this.filteredProducts = [...this.products]
-            }
-        })
-
-        // subscribe to cart service to get the cart items
-        this.cartService.cart$.subscribe((item) => {
-            this.cartItem = item
-        })
+    trackByProductId(index: number, product: Product): number {
+        return product.id
     }
 
-    applyFilters(filters: { category: string; sort: string }) {
-        let filtered = [...this.products]
-
-        // apply category filter
-        if (filters.category !== "all") {
-            filtered = filtered.filter(
-                (product) => product.category === filters.category
-            )
-        }
-
-        // apply sort filter
-        if (filters.sort === "price-low-to-high") {
-            filtered.sort((a, b) => a.price - b.price)
-        } else if (filters.sort === "price-high-to-low") {
-            filtered.sort((a, b) => b.price - a.price)
-        } else if (filters.sort === "rating-low-to-high") {
-            filtered.sort((a, b) => a.rating.rate - b.rating.rate)
-        } else if (filters.sort === "rating-high-to-low") {
-            filtered.sort((a, b) => b.rating.rate - a.rating.rate)
-        }
-
-        this.filteredProducts = filtered
-    }
-
-    // convert rating to percentage
-    getStarPercentage(rating: number): string {
-        return `${(rating / 5) * 100}%`
-    }
-
-    addToCart(product: any) {
-        this._snackBar.open("Added a product to cart now!", "Close", {
+    // add product to cart
+    addToCart(product: Product): void {
+        this._snackBar.open("Product added to cart", "Close", {
             duration: 2000,
         })
 
-        this.cartService.addToCart(product)
+        this.cartService.addProductToCart(product)
     }
 
-    // check if there is a product in the cart or not
-    isItemInCart(productId: number): number {
-        const products = this.cartItem.find((item) => item.id === productId)
-        return products ? products.quantity : 0
+    // filter and sort products based on category and sort option
+    filterAndSortProducts(filters: {
+        category: string
+        sort: "asc" | "desc" | "none"
+    }): void {
+        this.selectedCategory = filters.category
+        this.selectedSort = filters.sort
+        this.productService.setSortAndFilter(filters.category, filters.sort)
+    }
+
+    // get star rating percentage based on the rating value
+    getStarPercentage(rate: number): string {
+        return `${(rate / 5) * 100}%`
     }
 }
