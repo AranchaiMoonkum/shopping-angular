@@ -52,13 +52,8 @@ export class CartService {
 
     // remove a product from the cart
     removeProductFromCart(product: Product): void {
-        const updatedCart = this.cartSubject.value
-            .map((p) =>
-                p.id === product.id && p.quantity >= 1
-                    ? { ...p, quantity: p.quantity - 1 }
-                    : p
-            )
-            .filter((p) => p.quantity > 0) // remove products with quantity 0
+        const cart = this.cartSubject.getValue()
+        const updatedCart = cart.filter((p) => p.id !== product.id)
 
         this.cartSubject.next(updatedCart) // emit the updated cart to subscribers
     }

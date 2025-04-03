@@ -38,7 +38,9 @@
                             <input
                                 type="number"
                                 [(ngModel)]="product.quantity"
-                                (change)="removeProductFromCart(product)"
+                                (change)="
+                                    updateQuantity(product, product.quantity)
+                                "
                                 class="cart-items__input"
                                 min="1"
                             />

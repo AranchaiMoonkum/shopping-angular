@@ -49,7 +49,8 @@ export class CheckoutDialogComponent implements OnInit {
     }
 
     updateQuantity(product: Product, quantity: number) {
-        if (quantity < 1) {
+        // check if quantity is a number and greater than 0
+        if (quantity < 1 || isNaN(quantity)) {
             this.removeProductFromCart(product)
         }
 
