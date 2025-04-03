@@ -13,6 +13,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar"
 
 // import functional components
 import { ProductFilterModule } from "../../components/product-filter/product-filter.module"
+import { UpdateQuantityModule } from "../../components/update-quantity/update-quantity.module"
 
 @NgModule({
     declarations: [HomeComponent],
@@ -23,6 +24,7 @@ import { ProductFilterModule } from "../../components/product-filter/product-fil
         MatIconModule,
         MatSnackBarModule,
         NavbarModule,
+        UpdateQuantityModule,
     ],
     exports: [HomeComponent],
 })

@@ -42,15 +42,16 @@
                             {{ product.category }}
                         </h2>
                     </div>
-                    <div class="product-add">
-                        <button
-                            class="product-add__button"
-                            (click)="addToCart(product)"
-                        >
-                            <span>+</span>
-                        </button>
-                    </div>
                 </div>
+
+                <div class="update-quantity">
+                    <app-update-quantity
+                        [product]="product"
+                        [quantity]="getProductQuantity(product)"
+                        (quantityChange)="updateCart(product, $event)"
+                    ></app-update-quantity>
+                </div>
+
                 <p class="product__price">{{ product.price | currency }}</p>
 
                 <div class="star-rating">

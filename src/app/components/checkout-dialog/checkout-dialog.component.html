@@ -23,39 +23,11 @@
                     <div
                         class="cart-items__details cart-items__details--quantity"
                     >
-                        <section class="cart-items__quantity-change">
-                            <button
-                                class="cart-items__add"
-                                (click)="
-                                    updateQuantity(
-                                        product,
-                                        product.quantity + 1
-                                    )
-                                "
-                            >
-                                +
-                            </button>
-                            <input
-                                type="number"
-                                [(ngModel)]="product.quantity"
-                                (change)="
-                                    updateQuantity(product, product.quantity)
-                                "
-                                class="cart-items__input"
-                                min="1"
-                            />
-                            <button
-                                class="cart-items__remove"
-                                (click)="
-                                    updateQuantity(
-                                        product,
-                                        product.quantity - 1
-                                    )
-                                "
-                            >
-                                -
-                            </button>
-                        </section>
+                        <app-update-quantity
+                            [product]="product"
+                            [quantity]="product.quantity"
+                            (quantityChange)="updateQuantity(product, $event)"
+                        ></app-update-quantity>
                         <button
                             (click)="removeProductFromCart(product)"
                             class="cart-items__delete"

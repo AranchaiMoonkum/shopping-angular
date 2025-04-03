@@ -1,0 +1,14 @@
+<section class="product-items__quantity-change">
+    <button class="product-items__add" (click)="increaseQuantity()">+</button>
+    <input
+        type="number"
+        [value]="quantity"
+        (change)="onInputChange($event)"
+        class="product-items__input"
+        min="1"
+        max="99"
+    />
+    <button class="product-items__remove" (click)="decreaseQuantity()">
+        -
+    </button>
+</section>

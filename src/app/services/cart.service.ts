@@ -26,13 +26,29 @@ export class CartService {
         return this.cartSubject.asObservable()
     }
 
+    // get product quantity from the cart observable
+    getProductQuantity(product: Product) {
+        const cart = this.cartSubject.getValue()
+        const existingProduct = cart.find((p) => p.id === product.id)
+        return existingProduct ? existingProduct.quantity : 0
+    }
+
     // update quantity of a product in the cart
     updateProductQuantity(product: Product, quantity: number) {
-        const updatedCart = this.cartSubject
-            .getValue()
-            .map((p) => (p.id === product.id ? { ...p, quantity } : p))
+        const cart = this.cartSubject.getValue()
+        const cartIndex = cart.findIndex((p) => p.id === product.id)
 
-        this.cartSubject.next(updatedCart) // emit the updated cart to subscribers
+        if (quantity === 0) {
+            this.removeProductFromCart(product)
+        } else {
+            if (cartIndex > -1) {
+                cart[cartIndex].quantity = quantity
+            } else {
+                product.quantity = quantity
+                cart.push(product)
+            }
+            this.cartSubject.next([...cart]) // update observable
+        }
     }
 
     // add product to the cart
@@ -56,9 +72,5 @@ export class CartService {
         const updatedCart = cart.filter((p) => p.id !== product.id)
 
         this.cartSubject.next(updatedCart) // emit the updated cart to subscribers
-    }
-
-    clearCart() {
-        this.cartSubject.next([])
     }
 }

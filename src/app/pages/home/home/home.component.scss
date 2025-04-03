@@ -43,7 +43,7 @@
 }
 
 .product-section {
-    background-color: $pale-blue;
+    background-color: $white;
 }
 
 .container {
@@ -95,33 +95,14 @@
                 text-decoration: underline;
             }
         }
+    }
 
-        .product-add__button {
-            background-color: $white;
-            border-radius: 0;
-            border: $border;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 25px;
-            height: 25px;
-
-            &:hover {
-                background: $black;
-                color: $white;
-                border: 1px solid $black;
-            }
-
-            span {
-                font-size: 1rem;
-                font-weight: 400;
-            }
-        }
+    .update-quantity {
+        margin-top: 1rem;
     }
 
     .product__price {
-        margin-top: 1.4rem;
+        margin-top: 1rem;
         font-weight: 400;
     }
 

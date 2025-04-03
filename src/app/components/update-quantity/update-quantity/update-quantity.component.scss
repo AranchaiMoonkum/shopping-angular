@@ -1,0 +1,43 @@
+@use "../../../variables" as *;
+
+.product-items__quantity-change {
+    display: flex;
+    flex-direction: row;
+
+    .product-items__add,
+    .product-items__remove,
+    .product-items__input {
+        border-top: 1px solid $black;
+        border-bottom: 1px solid $black;
+        outline: none;
+        color: $black;
+        background-color: $white;
+        text-align: center;
+        border-radius: 0;
+        font-size: 0.875rem;
+        font-weight: 400;
+    }
+
+    .product-items__add,
+    .product-items__remove {
+        transition: all 0.15s ease-in-out;
+        border-left: 1px solid $black;
+        border-right: 1px solid $black;
+        cursor: pointer;
+        width: 25px;
+        height: 25px;
+    }
+
+    .product-items__add:hover,
+    .product-items__remove:hover {
+        background-color: $black;
+        color: $white;
+    }
+
+    .product-items__input {
+        width: 50px;
+        height: 25px;
+        border-left: 0;
+        border-right: 0;
+    }
+}

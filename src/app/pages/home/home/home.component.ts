@@ -60,4 +60,18 @@ export class HomeComponent {
     getStarPercentage(rate: number): string {
         return `${(rate / 5) * 100}%`
     }
+
+    // update the quantity of the product in the cart
+    updateCart(product: Product, quantity: number): void {
+        if (quantity === 0) {
+            this.cartService.removeProductFromCart(product)
+        } else {
+            this.cartService.updateProductQuantity(product, quantity)
+        }
+    }
+
+    getProductQuantity(product: Product): number {
+        const cartQuantity = this.cartService.getProductQuantity(product)
+        return cartQuantity ? cartQuantity : 0
+    }
 }

@@ -15,6 +15,7 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar"
 import { MatIconModule } from "@angular/material/icon"
 import { MatTooltipModule } from "@angular/material/tooltip"
 import { Observable } from "rxjs"
+import { UpdateQuantityModule } from "../update-quantity/update-quantity.module"
 
 @Component({
     standalone: true,
@@ -31,6 +32,7 @@ import { Observable } from "rxjs"
         MatSnackBarModule,
         MatIconModule,
         MatTooltipModule,
+        UpdateQuantityModule,
     ],
 })
 export class CheckoutDialogComponent implements OnInit {
@@ -48,13 +50,8 @@ export class CheckoutDialogComponent implements OnInit {
         this.totalPrice$ = this.cartService.totalPrice$
     }
 
-    updateQuantity(product: Product, quantity: number) {
-        // check if quantity is a number and greater than 0
-        if (quantity < 1 || isNaN(quantity)) {
-            this.removeProductFromCart(product)
-        }
-
-        this.cartService.updateProductQuantity(product, quantity)
+    updateQuantity(product: Product, newQuantity: number) {
+        this.cartService.updateProductQuantity(product, newQuantity)
     }
 
     removeProductFromCart(product: Product) {
