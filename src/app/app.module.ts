@@ -1,5 +1,5 @@
 // import components
-import { HomeModule } from "./components/home/home.module"
+import { HomeModule } from "./pages/home/home.module"
 
 // import angular core and platform modules
 import { NgModule } from "@angular/core"
