@@ -48,6 +48,14 @@ export class CheckoutDialogComponent implements OnInit {
         this.totalPrice$ = this.cartService.totalPrice$
     }
 
+    updateQuantity(product: Product, quantity: number) {
+        if (quantity < 1) {
+            this.removeProductFromCart(product)
+        }
+
+        this.cartService.updateProductQuantity(product, quantity)
+    }
+
     removeProductFromCart(product: Product) {
         this.cartService.removeProductFromCart(product)
     }
