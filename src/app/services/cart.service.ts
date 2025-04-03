@@ -26,6 +26,15 @@ export class CartService {
         return this.cartSubject.asObservable()
     }
 
+    // update quantity of a product in the cart
+    updateProductQuantity(product: Product, quantity: number) {
+        const updatedCart = this.cartSubject
+            .getValue()
+            .map((p) => (p.id === product.id ? { ...p, quantity } : p))
+
+        this.cartSubject.next(updatedCart) // emit the updated cart to subscribers
+    }
+
     // add product to the cart
     addProductToCart(product: Product) {
         const cart = [...this.cartSubject.value] // get the current cart value as an array
