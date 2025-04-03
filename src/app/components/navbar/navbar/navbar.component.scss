@@ -27,25 +27,14 @@
         justify-content: center;
         overflow: hidden;
         height: 100%;
-        padding-right: 0.875rem;
+        padding: 0 1rem;
         border-right: 1px solid $black;
-        max-width: max-content;
     }
 
     .navbar__title {
         font-size: 1.5rem;
         text-transform: uppercase;
         letter-spacing: 0.3rem;
-        animation: 15s marquee linear infinite;
-    }
-
-    @keyframes marquee {
-        0% {
-            transform: translateX(200%);
-        }
-        100% {
-            transform: translateX(-100%);
-        }
     }
 
     .navbar-right {
@@ -62,7 +51,12 @@
 }
 
 @media (max-width: 375px) {
+    .navbar__logo {
+        border-right: none !important;
+    }
+
     .navbar__title {
         font-size: 1rem !important;
+        display: none;
     }
 }
