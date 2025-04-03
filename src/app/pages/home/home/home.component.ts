@@ -70,6 +70,7 @@ export class HomeComponent {
         }
     }
 
+    // get the quantity of the product in the cart
     getProductQuantity(product: Product): number {
         const cartQuantity = this.cartService.getProductQuantity(product)
         return cartQuantity ? cartQuantity : 0
