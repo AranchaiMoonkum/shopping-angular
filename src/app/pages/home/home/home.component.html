@@ -24,6 +24,7 @@
                 trackBy: trackByProductId
             "
             class="product"
+            [ngStyle]="{ 'background-color': getCardBackgroundColor(product) }"
         >
             <mat-card-header>
                 <img

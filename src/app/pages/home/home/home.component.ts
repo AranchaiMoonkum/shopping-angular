@@ -75,4 +75,17 @@ export class HomeComponent {
         const cartQuantity = this.cartService.getProductQuantity(product)
         return cartQuantity ? cartQuantity : 0
     }
+
+    // change background color of the product card based on quantity
+    getCardBackgroundColor(product: Product): string {
+        const quantity = this.getProductQuantity(product)
+
+        if (quantity === 1) {
+            return "lightgreen"
+        } else if (quantity > 1) {
+            return "lightblue"
+        }
+
+        return "white"
+    }
 }
