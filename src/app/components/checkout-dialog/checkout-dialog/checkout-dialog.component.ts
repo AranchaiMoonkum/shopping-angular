@@ -36,9 +36,21 @@ export class CheckoutDialogComponent implements OnInit {
     }
 
     checkoutCart() {
-        this._snackBar.open("Checkout successful", "Close", {
-            duration: 2000,
-        })
+        // if cart is empty, show error message
+        if (this.cartService.isEmptyCart()) {
+            this._snackBar.open(
+                "Cart is empty, please add products to your cart",
+                "Buy something",
+                {
+                    duration: 2000,
+                }
+            )
+            return // exit the function if cart is empty
+        } else {
+            this._snackBar.open("Checkout successful", "Close", {
+                duration: 2000,
+            })
+        }
     }
 
     onClose() {

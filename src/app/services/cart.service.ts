@@ -33,6 +33,10 @@ export class CartService {
         return existingProduct ? existingProduct.quantity : 0
     }
 
+    isEmptyCart(): boolean {
+        return this.cartSubject.getValue().length === 0;
+    }
+
     // update quantity of a product in the cart
     updateProductQuantity(product: Product, quantity: number) {
         const cart = this.cartSubject.getValue()
