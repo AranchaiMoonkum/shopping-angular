@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core"
+import { ChangeDetectionStrategy, Component } from "@angular/core"
 import { ProductService } from "../../../services/product.service"
 import { Product } from "../../../types/interface"
 import { MatSnackBar } from "@angular/material/snack-bar"
