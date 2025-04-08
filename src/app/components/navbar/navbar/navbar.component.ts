@@ -3,7 +3,7 @@ import { Product } from "../../../types/interface"
 import { Observable } from "rxjs"
 import { CartService } from "../../../services/cart.service"
 import { MatDialog } from "@angular/material/dialog"
-import { CheckoutDialogComponent } from "../../checkout-dialog/checkout-dialog.component"
+import { CheckoutDialogComponent } from "../../checkout-dialog/checkout-dialog/checkout-dialog.component"
 
 @Component({
     standalone: false,

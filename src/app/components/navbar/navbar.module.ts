@@ -10,16 +10,19 @@ import { MatButtonModule } from "@angular/material/button"
 import { MatIconModule } from "@angular/material/icon"
 import { MatToolbarModule } from "@angular/material/toolbar"
 import { MatBadgeModule } from "@angular/material/badge"
+import { MatDialogModule } from "@angular/material/dialog"
+import { CheckoutDialogModule } from "../checkout-dialog/checkout-dialog.module"
 
 @NgModule({
     declarations: [NavbarComponent],
     imports: [
         CommonModule,
-
+        MatDialogModule,
         MatButtonModule,
         MatIconModule,
         MatToolbarModule,
         MatBadgeModule,
+        CheckoutDialogModule
     ],
     exports: [NavbarComponent],
 })

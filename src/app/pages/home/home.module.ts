@@ -14,9 +14,10 @@ import { MatSnackBarModule } from "@angular/material/snack-bar"
 // import functional components
 import { ProductFilterModule } from "../../components/product-filter/product-filter.module"
 import { UpdateQuantityModule } from "../../components/update-quantity/update-quantity.module"
+import { ChangeBackgroundPipe } from "../../pipes/change-background.pipe"
 
 @NgModule({
-    declarations: [HomeComponent],
+    declarations: [HomeComponent, ChangeBackgroundPipe],
     imports: [
         CommonModule,
         ProductFilterModule,
