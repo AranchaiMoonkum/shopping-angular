@@ -3,7 +3,7 @@ import { ProductService } from "../../../services/product.service"
 import { CartService } from "../../../services/cart.service"
 import { MatSnackBar } from "@angular/material/snack-bar"
 import { Product } from "../../../types/interface"
-import { Observable, tap } from "rxjs"
+import { Observable } from "rxjs"
 
 @Component({
     selector: "app-show-product",
@@ -34,6 +34,10 @@ export class ShowProductComponent {
     // get star rating percentage based on the rating value
     getStarPercentage(rate: number): string {
         return `${(rate / 5) * 100}%`
+    }
+
+    trackByProductId(index: number, product: Product): number {
+        return product.id
     }
 
     // update the quantity of the product in the cart

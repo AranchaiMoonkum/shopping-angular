@@ -11,32 +11,31 @@ export class UpdateQuantityComponent {
     @Input() quantity: number = 0
     @Output() quantityChange = new EventEmitter<number>()
 
-    increaseQuantity() {
-        if (this.quantity === 0) {
-            this.quantity = 1
-        } else if (this.quantity < 99) {
-            this.quantity++
-        }
+    private readonly MIN_QUANTITY = 0
+    private readonly MAX_QUANTITY = 99
 
-        this.quantityChange.emit(this.quantity)
+    increaseQuantity(): void {
+        this.quantity = Math.min(this.quantity + 1, this.MAX_QUANTITY)
+        this.emitQuantityChange()
     }
 
     decreaseQuantity() {
-        if (this.quantity > 1) {
-            this.quantity--
-            this.quantityChange.emit(this.quantity)
-        } else {
-            this.quantity = 0
-            this.quantityChange.emit(this.quantity)
-        }
+        this.quantity = Math.max(this.quantity - 1, this.MIN_QUANTITY)
+        this.emitQuantityChange()
     }
 
     onInputChange(event: Event) {
+        const input = (event.target as HTMLInputElement).value
         const newQuantity = Math.min(
-            99,
-            Math.max(1, +(event.target as HTMLInputElement).value)
+            this.MAX_QUANTITY,
+            Math.max(this.MIN_QUANTITY, +input)
         )
+
         this.quantity = newQuantity
+        this.emitQuantityChange()
+    }
+
+    private emitQuantityChange(): void {
         this.quantityChange.emit(this.quantity)
     }
 }

@@ -1,7 +1,10 @@
 <section>
     <div class="container">
         <mat-card
-            *ngFor="let product of filterProducts$ | async"
+            *ngFor="
+                let product of filterProducts$ | async;
+                trackBy: trackByProductId
+            "
             class="product"
             [ngStyle]="{
                 'background-color':
