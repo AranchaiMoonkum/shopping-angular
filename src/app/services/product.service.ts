@@ -13,6 +13,8 @@ import {
 import { Product } from "../types/interface"
 import { ApiService } from "./api.service"
 
+type SortOrder = "asc" | "desc" | "none"
+
 @Injectable({
     providedIn: "root",
 })
@@ -20,9 +22,7 @@ export class ProductService {
     // initialize the products observable with an empty array
     private readonly productsSubject = new ReplaySubject<Product[]>(1)
     private readonly filterCategorySubject = new BehaviorSubject<string>("all")
-    private readonly sortOrderSubject = new BehaviorSubject<
-        "asc" | "desc" | "none"
-    >("none")
+    private readonly sortOrderSubject = new BehaviorSubject<SortOrder>("none")
 
     // get products as an observable with caching using shareReplay
     private readonly products$ = merge(
@@ -60,7 +60,7 @@ export class ProductService {
     }
 
     // get values of filter and sort options
-    setSortAndFilter(category: string, order: "asc" | "desc" | "none") {
+    setSortAndFilter(category: string, order: SortOrder): void {
         this.filterCategorySubject.next(category)
         this.sortOrderSubject.next(order)
     }
@@ -69,7 +69,7 @@ export class ProductService {
     private filterAndSortProducts(
         products: Product[],
         category: string,
-        order: "asc" | "desc" | "none"
+        order: SortOrder
     ) {
         // filter products based on category
         let filteredProducts =
@@ -80,8 +80,7 @@ export class ProductService {
         // sort products based on order
         if (order !== "none") {
             filteredProducts = [...filteredProducts].sort((a, b) => {
-                const comparison = a.price - b.price
-                return order === "asc" ? comparison : -comparison
+                return order === "asc" ? a.price - b.price : b.price - a.price
             })
         }
 
