@@ -1,7 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core"
 
-type SortOrder = "asc" | "desc" | "none"
-
 @Component({
     standalone: false,
     selector: "app-product-filter",
@@ -12,11 +10,11 @@ export class ProductFilterComponent implements OnInit {
     @Input() categories: string[] = []
     @Output() filterChange = new EventEmitter<{
         category: string
-        sort: SortOrder
+        sort: "asc" | "desc" | "none"
     }>()
 
     selectedCategory: string = "all"
-    selectedSort: SortOrder = "none"
+    selectedSort: "asc" | "desc" | "none" = "none"
 
     ngOnInit(): void {
         this.emitFilters()

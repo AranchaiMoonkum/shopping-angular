@@ -16,4 +16,57 @@
     </div>
 </section>
 
-<app-show-product></app-show-product>
+<section class="product-section">
+    <div class="container">
+        <mat-card
+            *ngFor="
+                let product of filterProducts$ | async;
+                trackBy: trackByProductId
+            "
+            class="product"
+            [ngStyle]="{
+                'background-color':
+                    this.getProductQuantity(product) | changeBackground
+            }"
+        >
+            <mat-card-header>
+                <img
+                    class="product__image"
+                    mat-card-lg-image
+                    src="{{ product.image }}"
+                    alt="{{ product.title }}"
+                />
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="product__wrapper">
+                    <div class="product__details">
+                        <h2 class="product__title">{{ product.title }}</h2>
+                        <h2 class="product__category">
+                            {{ product.category }}
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="update-quantity">
+                    <app-update-quantity
+                        [product]="product"
+                        [quantity]="getProductQuantity(product)"
+                        (quantityChange)="updateCart(product, $event)"
+                    ></app-update-quantity>
+                </div>
+
+                <p class="product__price">{{ product.price | currency }}</p>
+
+                <div class="star-rating">
+                    <div
+                        class="star-rating__filled"
+                        [ngStyle]="{
+                            width: getStarPercentage(product.rating.rate),
+                        }"
+                    ></div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</section>
