@@ -1,8 +1,8 @@
 <section class="product-section">
-    <div class="container">
+    <div class="container row">
         <mat-card
             *ngFor="let product of filterProducts; trackBy: trackByProductId"
-            class="product"
+            class="product col-12 col-md-3"
             [ngStyle]="{
                 'background-color':
                     this.getProductQuantity(product) | changeBackground
