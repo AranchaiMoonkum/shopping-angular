@@ -3,8 +3,7 @@ import { ProductService } from "../../../services/product.service"
 import { Product } from "../../../types/interface"
 import { Observable } from "rxjs"
 import { CartService } from "../../../services/cart.service"
-
-type Sort = "asc" | "desc" | "none"
+import { Sort } from "../../../types/types"
 
 @Component({
     selector: "app-home",

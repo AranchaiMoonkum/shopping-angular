@@ -13,6 +13,7 @@ import {
 import { Product } from "../types/interface"
 import { ApiService } from "./api.service"
 import { CartService } from "./cart.service"
+import { Sort } from "../types/types"
 
 @Injectable({
     providedIn: "root",
@@ -21,9 +22,7 @@ export class ProductService {
     // initialize the products observable with an empty array
     private readonly productsSubject = new ReplaySubject<Product[]>(1)
     private readonly filterCategorySubject = new BehaviorSubject<string>("all")
-    private readonly sortOrderSubject = new BehaviorSubject<
-        "asc" | "desc" | "none"
-    >("none")
+    private readonly sortOrderSubject = new BehaviorSubject<Sort>("none")
 
     // get products as an observable with caching using shareReplay
     private readonly products$ = merge(
@@ -45,7 +44,6 @@ export class ProductService {
         this.sortOrderSubject.pipe(distinctUntilChanged()),
     ]).pipe(
         map(([products, cart, category, order]) => {
-            // return this.filterAndSortProducts(products, category, order)
             const productWithQuantity = products.map((p) => {
                 const inCart = cart.find((c) => c.id === p.id)
                 return {
@@ -78,7 +76,7 @@ export class ProductService {
     }
 
     // get values of filter and sort options
-    setSortAndFilter(category: string, order: "asc" | "desc" | "none") {
+    setSortAndFilter(category: string, order: Sort) {
         this.filterCategorySubject.next(category)
         this.sortOrderSubject.next(order)
     }
@@ -87,7 +85,7 @@ export class ProductService {
     private filterAndSortProducts(
         products: Product[],
         category: string,
-        order: "asc" | "desc" | "none"
+        order: Sort
     ) {
         // filter products based on category
         let filteredProducts =

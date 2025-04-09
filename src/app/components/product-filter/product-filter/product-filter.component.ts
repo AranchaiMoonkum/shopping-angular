@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core"
-
-type Sort = "asc" | "desc" | "none"
+import { Sort } from "../../../types/types"
 
 @Component({
     standalone: false,
