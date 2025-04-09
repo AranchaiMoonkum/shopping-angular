@@ -1,9 +1,13 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core"
-import { ProductService } from "../../../services/product.service"
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Input,
+    Output,
+} from "@angular/core"
 import { CartService } from "../../../services/cart.service"
 import { MatSnackBar } from "@angular/material/snack-bar"
 import { Product } from "../../../types/interface"
-import { Observable } from "rxjs"
 
 @Component({
     selector: "app-show-product",
@@ -12,12 +16,14 @@ import { Observable } from "rxjs"
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShowProductComponent {
-    filterProducts$: Observable<Product[]> =
-        this.productService.getFilteredProducts()
+    @Input() filterProducts: Product[] = []
+    @Output() updateCart = new EventEmitter<{
+        product: Product
+        quantity: number
+    }>()
 
-    // the constructor injects the ProductService to fetch products data
+    // constructor
     constructor(
-        private productService: ProductService,
         private cartService: CartService,
         private _snackBar: MatSnackBar
     ) {}
@@ -40,18 +46,13 @@ export class ShowProductComponent {
         return product.id
     }
 
-    // update the quantity of the product in the cart
-    updateCart(product: Product, quantity: number): void {
-        if (quantity === 0) {
-            this.cartService.removeProductFromCart(product)
-        } else {
-            this.cartService.updateProductQuantity(product, quantity)
-        }
+    // update quantity
+    updateQuantity(product: Product, quantity: number): void {
+        this.updateCart.emit({ product, quantity })
     }
 
     // get the quantity of the product in the cart
     getProductQuantity(product: Product): number {
-        const cartQuantity = this.cartService.getProductQuantity(product)
-        return cartQuantity ? cartQuantity : 0
+        return this.cartService.getProductQuantity(product)
     }
 }

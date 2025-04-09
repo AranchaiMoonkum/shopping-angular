@@ -12,6 +12,7 @@ import {
 } from "rxjs"
 import { Product } from "../types/interface"
 import { ApiService } from "./api.service"
+import { CartService } from "./cart.service"
 
 @Injectable({
     providedIn: "root",
@@ -39,15 +40,32 @@ export class ProductService {
 
     private readonly filteredProducts$ = combineLatest([
         this.products$,
+        this.cartService.getCart(),
         this.filterCategorySubject.pipe(distinctUntilChanged()),
         this.sortOrderSubject.pipe(distinctUntilChanged()),
     ]).pipe(
-        map(([products, category, order]) =>
-            this.filterAndSortProducts(products, category, order)
-        )
+        map(([products, cart, category, order]) => {
+            // return this.filterAndSortProducts(products, category, order)
+            const productWithQuantity = products.map((p) => {
+                const inCart = cart.find((c) => c.id === p.id)
+                return {
+                    ...p,
+                    quantity: inCart ? inCart.quantity : 0,
+                }
+            })
+
+            return this.filterAndSortProducts(
+                productWithQuantity,
+                category,
+                order
+            )
+        })
     )
 
-    constructor(private apiService: ApiService) {}
+    constructor(
+        private apiService: ApiService,
+        private cartService: CartService
+    ) {}
 
     // get the products as an observable
     getProducts(): Observable<Product[]> {

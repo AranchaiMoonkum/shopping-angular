@@ -1,10 +1,7 @@
-<section>
+<section class="product-section">
     <div class="container">
         <mat-card
-            *ngFor="
-                let product of filterProducts$ | async;
-                trackBy: trackByProductId
-            "
+            *ngFor="let product of filterProducts; trackBy: trackByProductId"
             class="product"
             [ngStyle]="{
                 'background-color':
@@ -34,7 +31,7 @@
                     <app-update-quantity
                         [product]="product"
                         [quantity]="getProductQuantity(product)"
-                        (quantityChange)="updateCart(product, $event)"
+                        (quantityChange)="updateQuantity(product, $event)"
                     ></app-update-quantity>
                 </div>
 
@@ -44,7 +41,7 @@
                     <div
                         class="star-rating__filled"
                         [ngStyle]="{
-                            width: getStarPercentage(product.rating.rate),
+                            width: getStarPercentage(product.rating.rate)
                         }"
                     ></div>
                 </div>
