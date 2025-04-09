@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core"
-
 import { MatDialogRef } from "@angular/material/dialog"
 import { Product } from "../../../types/interface"
 import { CartService } from "../../../services/cart.service"

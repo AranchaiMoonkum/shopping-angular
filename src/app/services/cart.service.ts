@@ -33,8 +33,9 @@ export class CartService {
         return existingProduct ? existingProduct.quantity : 0
     }
 
+    // method to check if the cart is empty
     isEmptyCart(): boolean {
-        return this.cartSubject.getValue().length === 0;
+        return this.cartSubject.getValue().length === 0
     }
 
     // update quantity of a product in the cart
