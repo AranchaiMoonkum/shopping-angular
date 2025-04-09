@@ -1,5 +1,4 @@
-$white: #fff;
-$black: #000;
+@use "../../../_variables.scss" as *;
 
 .product-filter {
     max-width: 90%;
