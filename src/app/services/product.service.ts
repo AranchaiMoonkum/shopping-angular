@@ -23,6 +23,7 @@ export class ProductService {
     private readonly productsSubject = new ReplaySubject<Product[]>(1)
     private readonly filterCategorySubject = new BehaviorSubject<string>("all")
     private readonly sortOrderSubject = new BehaviorSubject<Sort>("none")
+    private readonly searchQuerySubject = new BehaviorSubject<string>("")
 
     // get products as an observable with caching using shareReplay
     private readonly products$ = merge(
@@ -42,8 +43,9 @@ export class ProductService {
         this.cartService.getCart(),
         this.filterCategorySubject.pipe(distinctUntilChanged()),
         this.sortOrderSubject.pipe(distinctUntilChanged()),
+        this.searchQuerySubject.pipe(distinctUntilChanged()),
     ]).pipe(
-        map(([products, cart, category, order]) => {
+        map(([products, cart, category, order, search]) => {
             const productWithQuantity = products.map((p) => {
                 const inCart = cart.find((c) => c.id === p.id)
                 return {
@@ -55,7 +57,8 @@ export class ProductService {
             return this.filterAndSortProducts(
                 productWithQuantity,
                 category,
-                order
+                order,
+                search
             )
         })
     )
@@ -76,22 +79,31 @@ export class ProductService {
     }
 
     // get values of filter and sort options
-    setSortAndFilter(category: string, order: Sort) {
+    setSortAndFilter(category: string, order: Sort, search: string) {
         this.filterCategorySubject.next(category)
         this.sortOrderSubject.next(order)
+        this.searchQuerySubject.next(search)
     }
 
     // filter and sort the products based on category and sort option
     private filterAndSortProducts(
         products: Product[],
         category: string,
-        order: Sort
+        order: Sort,
+        search: string
     ) {
         // filter products based on category
         let filteredProducts =
             category === "all"
                 ? products
                 : products.filter((product) => product.category === category)
+
+        // filter products based on search query
+        if (search) {
+            filteredProducts = filteredProducts.filter((product) =>
+                product.title.toLowerCase().includes(search.toLowerCase())
+            )
+        }
 
         // sort products based on order
         if (order !== "none") {

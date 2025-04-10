@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core"
+import {
+    Component,
+    Input,
+    Output,
+    EventEmitter,
+    OnChanges,
+    SimpleChanges,
+} from "@angular/core"
 import { Sort } from "../../../types/types"
 
 @Component({
@@ -7,31 +14,33 @@ import { Sort } from "../../../types/types"
     templateUrl: "./product-filter.component.html",
     styleUrl: "./product-filter.component.scss",
 })
-export class ProductFilterComponent implements OnInit {
+export class ProductFilterComponent implements OnChanges {
     @Input() categories: string[] = []
     @Output() filterChange = new EventEmitter<{
         category: string
         sort: Sort
+        search: string
     }>()
 
     selectedCategory: string = "all"
     selectedSort: Sort = "none"
+    searchQuery: string = ""
 
-    ngOnInit(): void {
+    ngOnChanges(change: SimpleChanges): void {
+        if (change["categories"]) {
+            this.emitFilters()
+        }
+    }
+
+    onFilterChange(): void {
         this.emitFilters()
     }
 
-    onFilterChange() {
+    private emitFilters(): void {
         this.filterChange.emit({
             category: this.selectedCategory,
             sort: this.selectedSort,
-        })
-    }
-
-    emitFilters() {
-        this.filterChange.emit({
-            category: this.selectedCategory,
-            sort: this.selectedSort,
+            search: this.searchQuery,
         })
     }
 

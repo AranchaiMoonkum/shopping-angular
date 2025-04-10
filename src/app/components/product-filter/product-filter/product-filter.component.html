@@ -1,7 +1,8 @@
 <div class="product-filter">
     <!-- filter by category -->
     <mat-form-field>
-        <mat-label for="category">Category:</mat-label>
+        <mat-label>Category:</mat-label>
+
         <mat-select
             [(ngModel)]="selectedCategory"
             (ngModelChange)="onFilterChange()"
@@ -16,6 +17,7 @@
     <!-- sort by -->
     <mat-form-field>
         <mat-label for="sort">Sort By:</mat-label>
+
         <mat-select
             [(ngModel)]="selectedSort"
             (ngModelChange)="onFilterChange()"
@@ -24,5 +26,15 @@
             <mat-option value="asc">Low to high price</mat-option>
             <mat-option value="desc">High to low price</mat-option>
         </mat-select>
+    </mat-form-field>
+
+    <!-- search product -->
+    <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input
+            matInput
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onFilterChange()"
+        />
     </mat-form-field>
 </div>

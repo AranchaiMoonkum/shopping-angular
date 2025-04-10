@@ -15,8 +15,11 @@ export class HomeComponent {
     filterProducts$: Observable<Product[]> =
         this.productService.getFilteredProducts()
 
-    selectedCategory: string = "all"
-    selectedSort: Sort = "none"
+    filters = {
+        category: "all",
+        sort: "none",
+        search: "",
+    }
 
     // categories is an array of strings
     categories: string[] = [
@@ -33,10 +36,17 @@ export class HomeComponent {
     ) {}
 
     // filter and sort products based on category and sort option
-    filterAndSortProducts(filters: { category: string; sort: Sort }): void {
-        this.selectedCategory = filters.category
-        this.selectedSort = filters.sort
-        this.productService.setSortAndFilter(filters.category, filters.sort)
+    filterAndSortProducts(newFilters: {
+        category: string
+        sort: Sort
+        search: string
+    }): void {
+        this.filters = newFilters
+        this.productService.setSortAndFilter(
+            newFilters.category,
+            newFilters.sort,
+            newFilters.search
+        )
     }
 
     // update the quantity of the product in the cart

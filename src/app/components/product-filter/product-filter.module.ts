@@ -7,10 +7,17 @@ import {
     MatFormFieldModule,
 } from "@angular/material/form-field"
 import { FormsModule } from "@angular/forms"
+import { MatInputModule } from "@angular/material/input"
 
 @NgModule({
     declarations: [ProductFilterComponent],
-    imports: [CommonModule, MatSelectModule, MatFormFieldModule, FormsModule],
+    imports: [
+        CommonModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        FormsModule,
+        MatInputModule,
+    ],
     providers: [
         {
             provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
