@@ -42,7 +42,7 @@ body {
 
 .mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
     .mdc-notched-outline__notch {
-    border-color: none;
+    border-left: 1px transparent !important;
 }
 
 .mat-mdc-dialog-surface {
