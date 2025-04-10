@@ -19,6 +19,7 @@ body {
 
 .ng-tns-c3736059725-2,
 .ng-tns-c3736059725-0,
+.ng-tns-c3736059725-4,
 .mat-mdc-select-min-line {
     color: $black !important;
 }
@@ -32,6 +33,16 @@ body {
     border-right: 1px solid $black !important;
     border-bottom: 1px solid $black !important;
     border-radius: 0 !important;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled)
+    .mdc-notched-outline__notch {
+    border-color: $black !important;
+}
+
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
+    .mdc-notched-outline__notch {
+    border-color: none;
 }
 
 .mat-mdc-dialog-surface {
