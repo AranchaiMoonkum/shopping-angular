@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core"
-import { BehaviorSubject, map, Observable } from "rxjs"
+import { BehaviorSubject, map, Observable, shareReplay } from "rxjs"
 import { Product } from "../types/interface"
 
 @Injectable({
@@ -9,7 +9,8 @@ export class CartService {
     private readonly cartSubject = new BehaviorSubject<Product[]>([])
 
     readonly totalQuantity$: Observable<number> = this.cartSubject.pipe(
-        map((cart) => cart.reduce((acc, product) => acc + product.quantity, 0))
+        map((cart) => cart.reduce((acc, product) => acc + product.quantity, 0)),
+        shareReplay(1)
     )
 
     readonly totalPrice$: Observable<number> = this.cartSubject.pipe(
@@ -18,7 +19,8 @@ export class CartService {
                 (acc, product) => acc + product.price * product.quantity,
                 0
             )
-        )
+        ),
+        shareReplay(1)
     )
 
     // get data from the cart observable
@@ -28,8 +30,9 @@ export class CartService {
 
     // get product quantity from the cart observable
     getProductQuantity(product: Product) {
-        const cart = this.cartSubject.getValue()
-        const existingProduct = cart.find((p) => p.id === product.id)
+        const existingProduct = this.cartSubject
+            .getValue()
+            .find((p) => p.id === product.id)
         return existingProduct ? existingProduct.quantity : 0
     }
 
@@ -40,42 +43,44 @@ export class CartService {
 
     // update quantity of a product in the cart
     updateProductQuantity(product: Product, quantity: number) {
-        const cart = this.cartSubject.getValue()
-        const cartIndex = cart.findIndex((p) => p.id === product.id)
-
         if (quantity === 0) {
             this.removeProductFromCart(product)
         } else {
-            if (cartIndex > -1) {
-                cart[cartIndex].quantity = quantity
-            } else {
-                product.quantity = quantity
-                cart.push(product)
-            }
-            this.cartSubject.next([...cart]) // update observable
+            const cart = this.cartSubject.getValue()
+            const existingProduct = cart.find((p) => p.id === product.id)
+
+            const updatedCart = existingProduct
+                ? cart.map((p) =>
+                      p.id === product.id ? { ...p, quantity } : p
+                  )
+                : [...cart, { ...product, quantity }]
+
+            this.updateCart(updatedCart)
         }
     }
 
     // add product to the cart
     addProductToCart(product: Product) {
-        const cart = [...this.cartSubject.value] // get the current cart value as an array
+        const cart = this.cartSubject.getValue()
         const existingProduct = cart.find((p) => p.id === product.id) // check if the product is already in the cart
 
-        // update the cart with the new product or increase the quantity of the existing product
         const updatedCart = existingProduct
             ? cart.map((p) =>
                   p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
               )
             : [...cart, { ...product, quantity: 1 }]
-
-        this.cartSubject.next(updatedCart) // emit the updated cart to subscribers
+        this.updateCart(updatedCart)
     }
 
     // remove a product from the cart
     removeProductFromCart(product: Product): void {
-        const cart = this.cartSubject.getValue()
-        const updatedCart = cart.filter((p) => p.id !== product.id)
+        const updatedCart = this.cartSubject
+            .getValue()
+            .filter((p) => p.id !== product.id)
+        this.updateCart(updatedCart)
+    }
 
-        this.cartSubject.next(updatedCart) // emit the updated cart to subscribers
+    private updateCart(cart: Product[]): void {
+        this.cartSubject.next([...cart])
     }
 }
