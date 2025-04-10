@@ -34,7 +34,10 @@ export class ShowProductComponent {
             duration: 2000,
         })
 
-        this.cartService.addProductToCart(product)
+        this.updateCart.emit({
+            product,
+            quantity: this.getProductQuantity(product) + 1,
+        })
     }
 
     // get star rating percentage based on the rating value

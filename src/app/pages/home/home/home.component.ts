@@ -40,11 +40,13 @@ export class HomeComponent {
     }
 
     // update the quantity of the product in the cart
-    updateCart(product: Product, quantity: number): void {
-        if (quantity === 0) {
-            this.cartService.removeProductFromCart(product)
-        } else {
-            this.cartService.updateProductQuantity(product, quantity)
-        }
+    handleUpdateCart({
+        product,
+        quantity,
+    }: {
+        product: Product
+        quantity: number
+    }) {
+        this.cartService.updateProductQuantity(product, quantity)
     }
 }

@@ -18,6 +18,6 @@
 
 <app-show-product
     [filterProducts]="(filterProducts$ | async) ?? []"
-    (updateCart)="updateCart($event.product, $event.quantity)"
+    (updateCart)="handleUpdateCart($event)"
 >
 </app-show-product>
