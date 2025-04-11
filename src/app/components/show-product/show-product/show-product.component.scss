@@ -4,15 +4,6 @@
     background-color: $white;
 }
 
-// .container {
-//     overflow: hidden;
-//     display: grid;
-//     grid-template-columns: repeat(4, 1fr);
-//     border-top: $border;
-//     border-bottom: $border;
-//     margin: 0 auto;
-// }
-
 .container {
     padding: 0;
     max-width: 100%;
@@ -78,29 +69,29 @@
     }
 
     .star-rating {
-        position: relative;
-        display: flex;
-        align-items: center;
+        display: inline-block;
         font-size: 24px;
-        color: $pale-white;
-        letter-spacing: 2px;
+        position: relative;
+        line-height: 1;
+        color: #ccc; /* Grey for empty stars */
 
         &::before {
-            content: "★★★★★";
+            content: "\2605\2605\2605\2605\2605"; /* 5 stars */
+            letter-spacing: 3px;
         }
 
         .star-rating__filled {
             position: absolute;
             top: 0;
             left: 0;
-            overflow: hidden;
             white-space: nowrap;
+            overflow: hidden;
             color: $yellow;
-            width: 0%;
-        }
 
-        .star-rating__filled::before {
-            content: "★★★★★";
+            &::before {
+                content: "\2605\2605\2605\2605\2605"; /* 5 stars */
+                letter-spacing: 3px;
+            }
         }
     }
 }
