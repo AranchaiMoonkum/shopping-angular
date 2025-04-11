@@ -30,8 +30,12 @@ export class CheckoutDialogComponent implements OnInit {
         this.cartService.updateProductQuantity(product, newQuantity)
     }
 
-    removeProductFromCart(product: Product) {
+    removeOnClick(product: Product) {
         this.cartService.removeProductFromCart(product)
+
+        this._snackBar.open("Product was removed from cart", "Close", {
+            duration: 2000,
+        })
     }
 
     checkoutCart() {
