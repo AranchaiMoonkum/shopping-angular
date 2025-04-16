@@ -42,7 +42,7 @@ export class HomeComponent {
         search: string
     }): void {
         this.filters = newFilters
-        this.productService.setSortAndFilter(
+        this.productService.updateFilterCriteria(
             newFilters.category,
             newFilters.sort,
             newFilters.search

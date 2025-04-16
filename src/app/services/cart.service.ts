@@ -23,64 +23,54 @@ export class CartService {
         shareReplay(1)
     )
 
-    // get data from the cart observable
     getCart() {
         return this.cartSubject.asObservable()
     }
 
-    // get product quantity from the cart observable
-    getProductQuantity(product: Product) {
-        const existingProduct = this.cartSubject
-            .getValue()
-            .find((p) => p.id === product.id)
-        return existingProduct ? existingProduct.quantity : 0
+    getProductQuantity(product: Product): number {
+        return this.findProduct(product)?.quantity ?? 0
     }
 
-    // method to check if the cart is empty
     isEmptyCart(): boolean {
-        return this.cartSubject.getValue().length === 0
+        return this.cartItems.length === 0
     }
 
-    // update quantity of a product in the cart
-    updateProductQuantity(product: Product, quantity: number) {
-        if (quantity === 0) {
-            this.removeProductFromCart(product)
-        } else {
-            const cart = this.cartSubject.getValue()
-            const existingProduct = cart.find((p) => p.id === product.id)
-
-            const updatedCart = existingProduct
-                ? cart.map((p) =>
+    updateProductQuantity(product: Product, quantity: number): void {
+        const updatedCart =
+            quantity === 0
+                ? this.cartItems.filter((p) => p.id !== product.id)
+                : this.cartItems.some((p) => p.id === product.id)
+                ? this.cartItems.map((p) =>
                       p.id === product.id ? { ...p, quantity } : p
                   )
-                : [...cart, { ...product, quantity }]
-
-            this.updateCart(updatedCart)
-        }
+                : [...this.cartItems, { ...product, quantity }]
+        this.emitUpdatedCart(updatedCart)
     }
 
-    // add product to the cart
-    addProductToCart(product: Product) {
-        const cart = this.cartSubject.getValue()
-        const existingProduct = cart.find((p) => p.id === product.id) // check if the product is already in the cart
-
+    addProductQuantity(product: Product): void {
+        const existingProduct = this.findProduct(product)
         const updatedCart = existingProduct
-            ? cart.map((p) =>
+            ? this.cartItems.map((p) =>
                   p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
               )
-            : [...cart, { ...product, quantity: 1 }]
-        this.updateCart(updatedCart)
+            : [...this.cartItems, { ...product, quantity: 1 }]
+        this.emitUpdatedCart(updatedCart)
     }
 
-    // remove a product from the cart
     removeProductFromCart(product: Product): void {
-        const updatedCart = this.cartSubject
-            .getValue()
-            .filter((p) => p.id !== product.id)
-        this.updateCart(updatedCart)
+        const updatedCart = this.cartItems.filter((p) => p.id !== product.id)
+        this.emitUpdatedCart(updatedCart)
     }
 
-    private updateCart(cart: Product[]): void {
+    private get cartItems(): Product[] {
+        return this.cartSubject.getValue()
+    }
+
+    private findProduct(product: Product): Product | undefined {
+        return this.cartItems.find((p) => p.id === product.id)
+    }
+
+    private emitUpdatedCart(cart: Product[]): void {
         this.cartSubject.next([...cart])
     }
 }

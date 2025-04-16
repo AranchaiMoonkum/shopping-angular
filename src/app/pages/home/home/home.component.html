@@ -16,8 +16,10 @@
     </div>
 </section>
 
-<app-show-product
-    [filterProducts]="(filterProducts$ | async) ?? []"
-    (updateCart)="handleUpdateCart($event)"
->
-</app-show-product>
+<ng-container *ngIf="filterProducts$ | async as products">
+    <app-show-product
+        [filterProducts]="products"
+        (updateCart)="handleUpdateCart($event)"
+    >
+    </app-show-product>
+</ng-container>
