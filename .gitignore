@@ -20,6 +20,10 @@ yarn-error.log
 .settings/
 *.sublime-workspace
 
+# Refactor files
+.prettierrc.json
+.editorconfig
+
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json
