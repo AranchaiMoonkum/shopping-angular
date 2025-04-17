@@ -7,6 +7,7 @@ import {
     Observable,
     ReplaySubject,
     shareReplay,
+    Subject,
     tap,
 } from "rxjs"
 import { Product } from "../types/interface"
@@ -19,20 +20,11 @@ import { ProductUtils } from "../utils/product-utils"
     providedIn: "root",
 })
 export class ProductService {
-    private readonly productsSubject = new ReplaySubject<Product[]>(1)
     private readonly category$ = new BehaviorSubject<string>("all")
     private readonly sort$ = new BehaviorSubject<Sort>("none")
     private readonly search$ = new BehaviorSubject<string>("")
 
-    private readonly products$ = merge(
-        this.apiService
-            .get<Product[]>("https://fakestoreapi.com/products")
-            .pipe(
-                tap((products) => this.productsSubject.next(products)),
-                shareReplay(1)
-            ),
-        this.productsSubject.asObservable()
-    )
+    private readonly products$ = new Subject<Product[]>()
 
     private readonly filteredProducts$ = combineLatest([
         this.products$,
@@ -68,5 +60,9 @@ export class ProductService {
         this.category$.next(category)
         this.sort$.next(sort)
         this.search$.next(search)
+    }
+
+    getTimeStamp() {
+        return Math.random()
     }
 }

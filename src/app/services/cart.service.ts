@@ -36,7 +36,7 @@ export class CartService {
     }
 
     updateProductQuantity(product: Product, quantity: number): void {
-        const updatedCart =
+        let updatedCart =
             quantity === 0
                 ? this.cartItems.filter((p) => p.id !== product.id)
                 : this.cartItems.some((p) => p.id === product.id)

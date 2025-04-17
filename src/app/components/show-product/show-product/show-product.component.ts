@@ -1,3 +1,4 @@
+import { ProductService } from "./../../../services/product.service"
 import {
     ChangeDetectionStrategy,
     Component,
@@ -25,6 +26,7 @@ export class ShowProductComponent {
     // constructor
     constructor(
         private cartService: CartService,
+        private productService: ProductService,
         private _snackBar: MatSnackBar
     ) {}
 
@@ -57,5 +59,9 @@ export class ShowProductComponent {
     // get the quantity of the product in the cart
     getProductQuantity(product: Product): number {
         return this.cartService.getProductQuantity(product)
+    }
+
+    getTimeStamp() {
+        return this.productService.getTimeStamp()
     }
 }

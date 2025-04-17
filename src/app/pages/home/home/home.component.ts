@@ -4,6 +4,7 @@ import { Product } from "../../../types/interface"
 import { Observable } from "rxjs"
 import { CartService } from "../../../services/cart.service"
 import { Sort } from "../../../types/types"
+import { ApiService } from "../../../services/api.service"
 
 @Component({
     selector: "app-home",
@@ -32,8 +33,13 @@ export class HomeComponent {
     // the constructor injects the ProductService to fetch products data
     constructor(
         private productService: ProductService,
-        private cartService: CartService
-    ) {}
+        private cartService: CartService,
+        private apiService: ApiService
+    ) {
+        this.apiService
+            .getProducts()
+            .subscribe((data: Product[]) => console.log(data))
+    }
 
     // filter and sort products based on category and sort option
     filterAndSortProducts(newFilters: {

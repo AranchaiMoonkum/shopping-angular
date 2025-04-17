@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { Observable } from "rxjs"
+import { Product } from "../types/interface"
 
 @Injectable({
     providedIn: "root",
@@ -8,7 +9,7 @@ import { Observable } from "rxjs"
 export class ApiService {
     constructor(private http: HttpClient) {}
 
-    get<T>(url: string): Observable<T> {
-        return this.http.get<T>(url)
+    getProducts(): Observable<Product[]> {
+        return this.http.get<Product[]>("fakestoreapi.com/products")
     }
 }
