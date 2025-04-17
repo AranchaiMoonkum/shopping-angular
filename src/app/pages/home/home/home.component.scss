@@ -1,5 +1,4 @@
-@use "../../../styles/variables" as *;
-@use "../../../styles/mixins" as *;
+@use "../../../_variables.scss" as *;
 
 .filter-section {
     background: $white;
@@ -52,7 +51,7 @@
 .container {
     overflow: hidden;
     display: grid;
-    @include responsive-grid(4);
+    grid-template-columns: repeat(4, 1fr);
     border-top: $border;
     border-bottom: $border;
     margin: 0 auto;
@@ -155,13 +154,13 @@
     }
 
     .container {
-        @include responsive-grid(3);
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (max-width: 768px) {
     .container {
-        @include responsive-grid(2);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .product__image {
@@ -178,7 +177,7 @@
     }
 
     .container {
-        @include responsive-grid(1);
+        grid-template-columns: repeat(1, 1fr);
     }
 
     .product__image {

@@ -1,4 +1,4 @@
-@use "../../../styles/variables" as *;
+@use "../../../variables" as *;
 
 .checkout-dialog__header {
     border-bottom: $border;
@@ -73,6 +73,48 @@ mat-dialog-content {
                 text-overflow: ellipsis;
                 max-width: 200px;
             }
+
+            // .cart-items__quantity-change {
+            //     display: flex;
+            //     flex-direction: row;
+
+            //     .cart-items__add,
+            //     .cart-items__remove,
+            //     .cart-items__input {
+            //         border-top: 1px solid $black;
+            //         border-bottom: 1px solid $black;
+            //         outline: none;
+            //         color: $black;
+            //         background-color: $white;
+            //         text-align: center;
+            //         border-radius: 0;
+            //         font-size: 0.875rem;
+            //         font-weight: 400;
+            //     }
+
+            //     .cart-items__add,
+            //     .cart-items__remove {
+            //         transition: all 0.15s ease-in-out;
+            //         border-left: 1px solid $black;
+            //         border-right: 1px solid $black;
+            //         cursor: pointer;
+            //         width: 25px;
+            //         height: 25px;
+            //     }
+
+            //     .cart-items__add:hover,
+            //     .cart-items__remove:hover {
+            //         background-color: $black;
+            //         color: $white;
+            //     }
+
+            //     .cart-items__input {
+            //         width: 50px;
+            //         height: 25px;
+            //         border-left: 0;
+            //         border-right: 0;
+            //     }
+            // }
 
             &:first-child {
                 justify-content: space-between;
