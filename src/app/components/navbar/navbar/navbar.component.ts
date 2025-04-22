@@ -1,4 +1,4 @@
-import { Component } from "@angular/core"
+import { ChangeDetectionStrategy, Component } from "@angular/core"
 import { Product } from "../../../types/interface"
 import { Observable } from "rxjs"
 import { CartService } from "../../../services/cart.service"
@@ -11,6 +11,7 @@ import { ProductService } from "../../../services/product.service"
     selector: "app-navbar",
     templateUrl: "./navbar.component.html",
     styleUrl: "./navbar.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarComponent {
     constructor(

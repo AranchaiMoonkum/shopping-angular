@@ -1,9 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core"
 import { ProductService } from "../../../services/product.service"
 import { Product } from "../../../types/interface"
-import { Observable } from "rxjs"
-import { CartService } from "../../../services/cart.service"
-import { Sort } from "../../../types/types"
 import { ApiService } from "../../../services/api.service"
 
 @Component({
@@ -12,57 +9,43 @@ import { ApiService } from "../../../services/api.service"
     styleUrl: "./home.component.scss",
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
-    filterProducts$: Observable<Product[]> =
-        this.productService.getFilteredProducts()
+export class HomeComponent implements OnInit {
+    products: Product[] = []
+    productsDisplay: Product[] = []
+    categories: string[] = []
 
-    filters = {
-        category: "all",
-        sort: "none",
-        search: "",
-    }
+    selectedCategory: string = "all"
 
-    // categories is an array of strings
-    categories: string[] = [
-        "men's clothing",
-        "jewelery",
-        "electronics",
-        "women's clothing",
-    ]
-
-    // the constructor injects the ProductService to fetch products data
     constructor(
-        private productService: ProductService,
-        private cartService: CartService,
-        private apiService: ApiService
-    ) {
+        private readonly apiService: ApiService,
+        private readonly productService: ProductService
+    ) {}
+
+    ngOnInit(): void {
         this.apiService
             .getProducts()
-            .subscribe((data: Product[]) => console.log(data))
+            .subscribe((data: { products: Product[] }) => {
+                this.productService.setProducts(data.products)
+                this.products = data.products
+
+                this.categories = [
+                    "all",
+                    ...this.products
+                        .map((p) => p.category)
+                        .filter((value, index, self) => {
+                            return self.indexOf(value) === index
+                        }),
+                ]
+            })
     }
 
-    // filter and sort products based on category and sort option
-    filterAndSortProducts(newFilters: {
-        category: string
-        sort: Sort
-        search: string
-    }): void {
-        this.filters = newFilters
-        this.productService.updateFilterCriteria(
-            newFilters.category,
-            newFilters.sort,
-            newFilters.search
-        )
-    }
-
-    // update the quantity of the product in the cart
-    handleUpdateCart({
-        product,
-        quantity,
-    }: {
-        product: Product
-        quantity: number
-    }) {
-        this.cartService.updateProductQuantity(product, quantity)
+    onFilterChange(category: string): void {
+        if (category === "all") {
+            this.productsDisplay = this.products
+        } else {
+            this.productsDisplay = this.products.filter(
+                (product) => product.category === category
+            )
+        }
     }
 }

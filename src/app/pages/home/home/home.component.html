@@ -3,7 +3,7 @@
 <section class="filter-section">
     <app-product-filter
         [categories]="categories"
-        (filterChange)="filterAndSortProducts($event)"
+        (filterChange)="onFilterChange($event)"
     ></app-product-filter>
 </section>
 
@@ -16,10 +16,4 @@
     </div>
 </section>
 
-<ng-container *ngIf="filterProducts$ | async as products">
-    <app-show-product
-        [filterProducts]="products"
-        (updateCart)="handleUpdateCart($event)"
-    >
-    </app-show-product>
-</ng-container>
+<app-show-product [showProducts]="productsDisplay"></app-show-product>

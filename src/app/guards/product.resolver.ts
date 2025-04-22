@@ -8,5 +8,5 @@ export const productResolver: ResolveFn<Product[]> = (): Observable<
     Product[]
 > => {
     const productService = inject(ProductService)
-    return productService.getFilteredProducts()
+    return productService.getProducts()
 }

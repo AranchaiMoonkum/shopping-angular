@@ -11,3 +11,9 @@ export interface Product {
     }
     quantity: number
 }
+
+export interface Sort {
+    key: string
+    displayName: string
+    type: "asc" | "desc"
+}

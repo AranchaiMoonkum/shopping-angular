@@ -17,11 +17,11 @@ import { Product } from "../../../types/interface"
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShowProductComponent {
-    @Input() filterProducts: Product[] = []
-    @Output() updateCart = new EventEmitter<{
-        product: Product
-        quantity: number
-    }>()
+    @Input() showProducts: Product[] = []
+    // @Output() updateCart = new EventEmitter<{
+    //     product: Product
+    //     quantity: number
+    // }>()
 
     // constructor
     constructor(
@@ -36,10 +36,10 @@ export class ShowProductComponent {
             duration: 2000,
         })
 
-        this.updateCart.emit({
-            product,
-            quantity: this.getProductQuantity(product) + 1,
-        })
+        // this.updateCart.emit({
+        //     product,
+        //     quantity: this.getProductQuantity(product) + 1,
+        // })
     }
 
     // get star rating percentage based on the rating value
@@ -52,9 +52,9 @@ export class ShowProductComponent {
     }
 
     // update quantity
-    updateQuantity(product: Product, quantity: number): void {
-        this.updateCart.emit({ product, quantity })
-    }
+    // updateQuantity(product: Product, quantity: number): void {
+    //     this.updateCart.emit({ product, quantity })
+    // }
 
     // get the quantity of the product in the cart
     getProductQuantity(product: Product): number {

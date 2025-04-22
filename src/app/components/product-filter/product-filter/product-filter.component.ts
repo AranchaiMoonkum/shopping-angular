@@ -1,12 +1,7 @@
-import {
-    Component,
-    Input,
-    Output,
-    EventEmitter,
-    OnChanges,
-    SimpleChanges,
-} from "@angular/core"
-import { Sort } from "../../../types/types"
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core"
+import { FormControl } from "@angular/forms"
+import { Sort } from "../../../types/interface"
+import { MatSelectChange } from "@angular/material/select"
 
 @Component({
     standalone: false,
@@ -14,39 +9,21 @@ import { Sort } from "../../../types/types"
     templateUrl: "./product-filter.component.html",
     styleUrl: "./product-filter.component.scss",
 })
-export class ProductFilterComponent implements OnChanges {
+export class ProductFilterComponent implements OnInit {
     @Input() categories: string[] = []
-    @Output() filterChange = new EventEmitter<{
-        category: string
-        sort: Sort
-        search: string
-    }>()
+    @Input() sortOptions: Sort[] = []
 
-    selectedCategory: string = "all"
-    selectedSort: Sort = "none"
-    searchQuery: string = ""
+    @Output() filterChange = new EventEmitter<string>()
 
-    ngOnChanges(change: SimpleChanges): void {
-        if (change["categories"]) {
-            this.emitFilters()
-        }
+    categoryControl = new FormControl("all")
+
+    ngOnInit(): void {
+        this.filterChange.emit(this.categoryControl.value ?? "all")
     }
 
-    onFilterChange(): void {
-        this.emitFilters()
-    }
+    onCategoryChange(event: MatSelectChange): void {
+        console.log("Selected category:", event.value)
 
-    private emitFilters(): void {
-        this.filterChange.emit({
-            category: this.selectedCategory,
-            sort: this.selectedSort,
-            search: this.searchQuery,
-        })
-    }
-
-    formatUpperCaseCategory(category: string) {
-        return (
-            category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()
-        )
+        this.filterChange.emit(event.value ?? "all")
     }
 }

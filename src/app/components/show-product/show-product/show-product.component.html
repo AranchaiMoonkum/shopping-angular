@@ -1,7 +1,7 @@
 <section class="product-section">
     <div class="container row">
         <mat-card
-            *ngFor="let product of filterProducts; trackBy: trackByProductId"
+            *ngFor="let product of showProducts; trackBy: trackByProductId"
             class="product col-12 col-md-3"
             [ngStyle]="{
                 'background-color':
@@ -28,11 +28,11 @@
                 </div>
 
                 <div class="update-quantity">
-                    <app-update-quantity
+                    <!-- <app-update-quantity
                         [product]="product"
                         [quantity]="getProductQuantity(product)"
                         (quantityChange)="updateQuantity(product, $event)"
-                    ></app-update-quantity>
+                    ></app-update-quantity> -->
                 </div>
 
                 <p class="product__price">{{ product.price | currency }}</p>

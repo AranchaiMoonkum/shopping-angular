@@ -6,7 +6,7 @@ import {
     MAT_FORM_FIELD_DEFAULT_OPTIONS,
     MatFormFieldModule,
 } from "@angular/material/form-field"
-import { FormsModule } from "@angular/forms"
+import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { MatInputModule } from "@angular/material/input"
 
 @NgModule({
@@ -17,6 +17,7 @@ import { MatInputModule } from "@angular/material/input"
         MatFormFieldModule,
         FormsModule,
         MatInputModule,
+        ReactiveFormsModule,
     ],
     providers: [
         {
