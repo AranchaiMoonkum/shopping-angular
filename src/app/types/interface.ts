@@ -13,7 +13,6 @@ export interface Product {
 }
 
 export interface Sort {
-    key: string
-    displayName: string
-    type: "asc" | "desc"
+    value: string
+    label: string
 }

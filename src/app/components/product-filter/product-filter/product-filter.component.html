@@ -14,18 +14,21 @@
     </mat-form-field>
 
     <!-- sort by -->
-    <!-- <mat-form-field>
+    <mat-form-field>
         <mat-label for="sort">Sort By:</mat-label>
 
         <mat-select
-            [(ngModel)]="selectedSort"
-            (ngModelChange)="onFilterChange()"
+            [formControl]="sortControl"
+            (selectionChange)="onSortChange($event)"
         >
-            <mat-option value="none">No sorting</mat-option>
-            <mat-option value="asc">Low to high price</mat-option>
-            <mat-option value="desc">High to low price</mat-option>
+            <mat-option
+                *ngFor="let option of sortOptions"
+                [value]="option.value"
+            >
+                {{ option.label }}
+            </mat-option>
         </mat-select>
-    </mat-form-field> -->
+    </mat-form-field>
 
     <!-- search product -->
     <!-- <mat-form-field>

@@ -16,6 +16,12 @@ export class HomeComponent implements OnInit {
 
     selectedCategory: string = "all"
 
+    private readonly sortFunctions = {
+        none: () => 0,
+        "price-asc": (a: Product, b: Product) => a.price - b.price,
+        "price-desc": (a: Product, b: Product) => b.price - a.price,
+    }
+
     constructor(
         private readonly apiService: ApiService,
         private readonly productService: ProductService
@@ -28,6 +34,8 @@ export class HomeComponent implements OnInit {
                 this.productService.setProducts(data.products)
                 this.products = data.products
 
+                console.log(this.products)
+
                 this.categories = [
                     "all",
                     ...this.products
@@ -39,13 +47,21 @@ export class HomeComponent implements OnInit {
             })
     }
 
-    onFilterChange(category: string): void {
-        if (category === "all") {
+    onFilterChange(filters: { category: string; sort: string }) {
+        if (filters.category === "all") {
             this.productsDisplay = this.products
         } else {
             this.productsDisplay = this.products.filter(
-                (product) => product.category === category
+                (product) => product.category === filters.category
             )
         }
+
+        const sortFn =
+            this.sortFunctions[filters.sort as keyof typeof this.sortFunctions]
+        if (sortFn) {
+            this.productsDisplay.sort(sortFn)
+        }
+
+        return this.productsDisplay
     }
 }
