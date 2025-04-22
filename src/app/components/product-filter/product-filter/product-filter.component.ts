@@ -15,24 +15,30 @@ export class ProductFilterComponent {
     @Output() filterChange = new EventEmitter<{
         category: string
         sort: string
+        search: string
     }>()
 
     sortOptions: Sort[] = [
         { value: "none", label: "None" },
         { value: "price-asc", label: "Price: Low to High" },
         { value: "price-desc", label: "Price: High to Low" },
+        { value: "name-asc", label: "Name: A to Z" },
+        { value: "name-desc", label: "Name: Z to A" },
     ]
 
     categoryControl = new FormControl("all")
     sortControl = new FormControl("none")
+    searchControl = new FormControl("")
 
     onCategoryChange(event: MatSelectChange): void {
-        console.log("Selected category:", event.value)
         this.emitFilterChange()
     }
 
     onSortChange(event: MatSelectChange): void {
-        console.log("Selected category:", event.value)
+        this.emitFilterChange()
+    }
+
+    onSearchChange(): void {
         this.emitFilterChange()
     }
 
@@ -40,6 +46,7 @@ export class ProductFilterComponent {
         this.filterChange.emit({
             category: this.categoryControl.value ?? "all",
             sort: this.sortControl.value ?? "none",
+            search: this.searchControl.value ?? "",
         })
     }
 }
