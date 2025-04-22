@@ -1,7 +1,7 @@
 <h2 mat-dialog-title class="checkout-dialog__header">Checkout</h2>
 
 <mat-dialog-content>
-    <div class="cart-items">
+    <ul class="cart-items">
         <li *ngFor="let product of cart$ | async" class="cart-items__item">
             <div class="checkout-container">
                 <section class="checkout-wrapper">
@@ -38,7 +38,7 @@
                 </section>
             </div>
         </li>
-    </div>
+    </ul>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="checkout-dialog__actions">
