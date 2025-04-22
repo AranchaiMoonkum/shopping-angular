@@ -15,9 +15,9 @@ import { ProductService } from "../../../services/product.service"
 })
 export class NavbarComponent {
     constructor(
-        private cartService: CartService,
-        private dialog: MatDialog,
-        private productService: ProductService
+        private readonly cartService: CartService,
+        private readonly dialog: MatDialog,
+        private readonly productService: ProductService
     ) {}
 
     cart: Product[] = []
