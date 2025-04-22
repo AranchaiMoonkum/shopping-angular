@@ -1,11 +1,5 @@
 import { ProductService } from "./../../../services/product.service"
-import {
-    ChangeDetectionStrategy,
-    Component,
-    EventEmitter,
-    Input,
-    Output,
-} from "@angular/core"
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core"
 import { CartService } from "../../../services/cart.service"
 import { MatSnackBar } from "@angular/material/snack-bar"
 import { Product } from "../../../types/interface"
@@ -18,29 +12,13 @@ import { Product } from "../../../types/interface"
 })
 export class ShowProductComponent {
     @Input() showProducts: Product[] = []
-    // @Output() updateCart = new EventEmitter<{
-    //     product: Product
-    //     quantity: number
-    // }>()
 
     // constructor
     constructor(
-        private cartService: CartService,
-        private productService: ProductService,
-        private _snackBar: MatSnackBar
+        private readonly cartService: CartService,
+        private readonly productService: ProductService,
+        private readonly _snackBar: MatSnackBar
     ) {}
-
-    // add product to cart
-    addToCart(product: Product): void {
-        this._snackBar.open("Product added to cart", "Close", {
-            duration: 2000,
-        })
-
-        // this.updateCart.emit({
-        //     product,
-        //     quantity: this.getProductQuantity(product) + 1,
-        // })
-    }
 
     // get star rating percentage based on the rating value
     getStarPercentage(rate: number): string {
@@ -50,11 +28,6 @@ export class ShowProductComponent {
     trackByProductId(index: number, product: Product): number {
         return product.id
     }
-
-    // update quantity
-    // updateQuantity(product: Product, quantity: number): void {
-    //     this.updateCart.emit({ product, quantity })
-    // }
 
     // get the quantity of the product in the cart
     getProductQuantity(product: Product): number {
