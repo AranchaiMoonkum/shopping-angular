@@ -1,6 +1,50 @@
 @use "../../../styles/variables" as *;
 @use "../../../styles/mixins" as *;
 
+.filter-section {
+    background: $white;
+    margin-top: 65px;
+    padding-top: 2rem;
+    padding-bottom: 0.5rem;
+}
+
+.marquee-wrapper {
+    border-top: $border;
+    border-bottom: $border;
+    padding: 0.5rem 0;
+    background-color: $white;
+    overflow: hidden;
+    width: 100%;
+
+    .marquee {
+        position: relative;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-top: 0.2rem;
+        width: 100%;
+    }
+
+    .marquee__text {
+        padding: 0 1rem;
+        font-size: 0.875rem;
+        color: $black;
+        text-transform: uppercase;
+        animation: marquee 40s linear infinite;
+        letter-spacing: 0.2rem;
+    }
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(200%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
 .product-section {
     background-color: $white;
 }
