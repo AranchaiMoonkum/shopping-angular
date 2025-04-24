@@ -1,8 +1,7 @@
 import { ProductService } from "./../../../services/product.service"
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core"
-import { CartService } from "../../../services/cart.service"
-import { MatSnackBar } from "@angular/material/snack-bar"
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core"
 import { Product } from "../../../types/interface"
+import { ApiService } from "../../../services/api.service"
 
 @Component({
     selector: "app-show-product",
@@ -10,31 +9,77 @@ import { Product } from "../../../types/interface"
     styleUrl: "./show-product.component.scss",
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShowProductComponent {
-    @Input() showProducts: Product[] = []
+export class ShowProductComponent implements OnInit {
+    products: Product[] = []
+    productsDisplay: Product[] = []
+    categories: string[] = []
 
-    // constructor
-    constructor(
-        private readonly cartService: CartService,
-        private readonly productService: ProductService,
-        private readonly _snackBar: MatSnackBar
-    ) {}
+    selectedCategory: string = "all"
 
-    // get star rating percentage based on the rating value
-    getStarPercentage(rate: number): string {
-        return `${(rate / 5) * 100}%`
+    private readonly sortFunctions = {
+        none: () => 0,
+        "price-asc": (a: Product, b: Product) => a.price - b.price,
+        "price-desc": (a: Product, b: Product) => b.price - a.price,
+        "name-asc": (a: Product, b: Product) => a.title.localeCompare(b.title),
+        "name-desc": (a: Product, b: Product) => b.title.localeCompare(a.title),
     }
 
-    trackByProductId(index: number, product: Product): number {
+    constructor(
+        private readonly apiService: ApiService,
+        private readonly productService: ProductService
+    ) {}
+
+    ngOnInit(): void {
+        this.apiService
+            .getProducts()
+            .subscribe((data: { products: Product[] }) => {
+                this.productService.setProducts(data.products)
+                this.products = data.products
+
+                this.productsDisplay = this.products
+
+                this.categories = [
+                    "all",
+                    ...this.products
+                        .map((p) => p.category)
+                        .filter((value, index, self) => {
+                            return self.indexOf(value) === index
+                        }),
+                ]
+            })
+    }
+
+    trackById(index: number, product: Product) {
         return product.id
     }
 
-    // get the quantity of the product in the cart
-    getProductQuantity(product: Product): number {
-        return this.cartService.getProductQuantity(product)
-    }
+    onFilterChange(filters: {
+        category: string
+        sort: string
+        search: string
+    }) {
+        if (filters.category === "all") {
+            this.productsDisplay = [...this.products]
+        } else {
+            this.productsDisplay = this.products.filter(
+                (product) => product.category === filters.category
+            )
+        }
 
-    getTimeStamp() {
-        return this.productService.getTimeStamp()
+        const sortFn =
+            this.sortFunctions[filters.sort as keyof typeof this.sortFunctions]
+        if (sortFn) {
+            this.productsDisplay.sort(sortFn)
+        }
+
+        if (filters.search) {
+            this.productsDisplay = this.productsDisplay.filter((product) =>
+                product.title
+                    .toLowerCase()
+                    .includes(filters.search.toLowerCase())
+            )
+        }
+
+        return this.productsDisplay
     }
 }
