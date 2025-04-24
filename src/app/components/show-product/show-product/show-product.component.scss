@@ -6,95 +6,17 @@
 }
 
 .container {
+    @include responsive-grid(4);
+
+    display: grid;
+    align-items: stretch;
     padding: 0;
     max-width: 100%;
 }
 
-.row {
-    margin: 0;
-}
-
-.product {
-    background: $white;
-    border-radius: 0;
-    box-shadow: 0 0 0 1px $black;
-    padding: 1rem;
-
-    .product__image {
-        width: 100%;
-        height: 200px;
-        object-fit: contain;
-        transition: all 0.15s ease-in-out;
-    }
-
-    &:hover .product__image {
-        transform: scale(1.05);
-    }
-
-    .product__wrapper {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 1rem;
-        padding-top: 0.75rem;
-
-        .product__details {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-
-            h2 {
-                line-height: 150%;
-                font-size: 0.9rem;
-                font-weight: 400;
-                margin-bottom: 2px !important;
-            }
-
-            &:hover h2 {
-                text-decoration: underline;
-            }
-        }
-    }
-
-    .update-quantity {
-        margin-top: 1rem;
-    }
-
-    .product__price {
-        margin-top: 1rem;
-        font-weight: 400;
-    }
-
-    .mat-mdc-card-header {
-        justify-content: center;
-    }
-
-    .star-rating {
-        display: inline-block;
-        font-size: 24px;
-        position: relative;
-        line-height: 1;
-        color: #ccc; /* Grey for empty stars */
-
-        &::before {
-            content: "\2605\2605\2605\2605\2605"; /* 5 stars */
-            letter-spacing: 3px;
-        }
-
-        .star-rating__filled {
-            position: absolute;
-            top: 0;
-            left: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            color: $yellow;
-
-            &::before {
-                content: "\2605\2605\2605\2605\2605"; /* 5 stars */
-                letter-spacing: 3px;
-            }
-        }
-    }
+app-card-product {
+    height: 100%;
+    display: flex;
 }
 
 /* media queries */
