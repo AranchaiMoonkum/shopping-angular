@@ -1,0 +1,38 @@
+<mat-card class="product col-12 col-md-3">
+    <mat-card-header>
+        <img
+            class="product__image"
+            mat-card-lg-image
+            src="{{ product.image }}"
+            alt="{{ product.title }}"
+        />
+    </mat-card-header>
+
+    <mat-card-content>
+        <div class="product__wrapper">
+            <div class="product__details">
+                <h2 class="product__title">{{ product.title }}</h2>
+                <h2 class="product__category">
+                    {{ product.category }}
+                </h2>
+            </div>
+        </div>
+
+        <div class="update-quantity">
+            <app-update-quantity></app-update-quantity>
+        </div>
+
+        <p class="product__price">{{ product.price | currency }}</p>
+
+        <p>{{ getTimeStamp() }}</p>
+
+        <div class="star-rating">
+            <div
+                class="star-rating__filled"
+                [ngStyle]="{
+                    width: getStarPercentage(product.rating.rate)
+                }"
+            ></div>
+        </div>
+    </mat-card-content>
+</mat-card>
