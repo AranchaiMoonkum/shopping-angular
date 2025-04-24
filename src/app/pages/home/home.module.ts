@@ -15,6 +15,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar"
 import { ProductFilterModule } from "../../components/product-filter/product-filter.module"
 import { UpdateQuantityModule } from "../../components/update-quantity/update-quantity.module"
 import { ShowProductModule } from "../../components/show-product/show-product.module"
+import { DialogButtonModule } from "../../components/dialog-button/dialog-button.module"
 
 @NgModule({
     declarations: [HomeComponent],
@@ -27,6 +28,7 @@ import { ShowProductModule } from "../../components/show-product/show-product.mo
         NavbarModule,
         UpdateQuantityModule,
         ShowProductModule,
+        DialogButtonModule,
     ],
     exports: [HomeComponent],
 })

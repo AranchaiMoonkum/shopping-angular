@@ -4,17 +4,5 @@
             <span class="navbar__title"><a href="/">Shopping Website</a></span>
         </div>
         {{ getTimeStamp() }}
-        <section class="navbar-right">
-            <button (click)="openDialog()" mat-icon-button>
-                <mat-icon
-                    matBadge="{{ totalQuantity$ | async }}"
-                    matBadgePosition="after"
-                    matBadgeColor="accent"
-                    aria-hidden="false"
-                >
-                    shopping_cart
-                </mat-icon>
-            </button>
-        </section>
     </mat-toolbar-row>
 </mat-toolbar>

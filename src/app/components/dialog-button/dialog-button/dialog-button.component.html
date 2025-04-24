@@ -1,1 +1,12 @@
-<p>dialog-button works!</p>
+<div class="float_button">
+    <button (click)="openDialog()" mat-icon-button>
+        <mat-icon
+            matBadge="{{ totalQuantity$ | async }}"
+            matBadgePosition="after"
+            matBadgeColor="accent"
+            aria-hidden="false"
+        >
+            shopping_cart
+        </mat-icon>
+    </button>
+</div>

@@ -1,0 +1,10 @@
+@use "../../../styles/variables" as *;
+
+.float_button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    border: $border;
+    background-color: $white;
+}
