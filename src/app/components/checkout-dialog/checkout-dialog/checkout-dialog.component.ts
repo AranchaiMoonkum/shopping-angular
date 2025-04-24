@@ -48,7 +48,6 @@ export class CheckoutDialogComponent implements OnInit {
                     duration: 2000,
                 }
             )
-            return // exit the function if cart is empty
         } else {
             this._snackBar.open("Checkout successful", "Close", {
                 duration: 2000,
