@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core"
-import { BehaviorSubject, map, Observable, shareReplay } from "rxjs"
+import { BehaviorSubject, map, Observable } from "rxjs"
 import { Product } from "../types/interface"
 
 @Injectable({
@@ -9,22 +9,57 @@ export class CartService {
     private readonly cartSubject = new BehaviorSubject<Product[]>([])
 
     readonly totalQuantity$: Observable<number> = this.cartSubject.pipe(
-        map((cart) => cart.reduce((acc, product) => acc + product.quantity, 0)),
-        shareReplay(1)
+        map((cart) => {
+            let quantity = 0
+            cart.forEach((product) => {
+                quantity += product.quantity
+            })
+            return quantity
+        })
     )
 
     readonly totalPrice$: Observable<number> = this.cartSubject.pipe(
-        map((cart) =>
-            cart.reduce(
-                (acc, product) => acc + product.price * product.quantity,
-                0
-            )
-        ),
-        shareReplay(1)
+        map((cart) => {
+            let price = 0
+            cart.forEach((product) => {
+                price += product.price * product.quantity
+            })
+            return price
+        })
     )
 
     getCart() {
         return this.cartSubject.asObservable()
+    }
+
+    addProductQuantity(product: Product) {
+        const cart = this.cartItems
+        const existingProduct = this.findProduct(product)
+
+        if (existingProduct) {
+            existingProduct.quantity += 1
+        } else {
+            const newProduct = { ...product, quantity: 1 }
+            cart.push(newProduct)
+        }
+
+        this.emitUpdatedCart(cart)
+    }
+
+    removeProductFromCart(product: Product) {
+        const updatedCart = this.cartItems.filter((p) => p.id !== product.id)
+        this.emitUpdatedCart(updatedCart)
+    }
+
+    updateProductQuantity(product: Product, quantity: number) {
+        const cart = this.cartItems.filter((p) => p.id !== product.id)
+
+        if (quantity > 0) {
+            cart.push({ ...product, quantity })
+        }
+
+        this.emitUpdatedCart(cart)
+        console.log(cart)
     }
 
     getProductQuantity(product: Product): number {
@@ -35,33 +70,6 @@ export class CartService {
         return this.cartItems.length === 0
     }
 
-    updateProductQuantity(product: Product, quantity: number): void {
-        let updatedCart =
-            quantity === 0
-                ? this.cartItems.filter((p) => p.id !== product.id)
-                : this.cartItems.some((p) => p.id === product.id)
-                ? this.cartItems.map((p) =>
-                      p.id === product.id ? { ...p, quantity } : p
-                  )
-                : [...this.cartItems, { ...product, quantity }]
-        this.emitUpdatedCart(updatedCart)
-    }
-
-    addProductQuantity(product: Product): void {
-        const existingProduct = this.findProduct(product)
-        const updatedCart = existingProduct
-            ? this.cartItems.map((p) =>
-                  p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
-              )
-            : [...this.cartItems, { ...product, quantity: 1 }]
-        this.emitUpdatedCart(updatedCart)
-    }
-
-    removeProductFromCart(product: Product): void {
-        const updatedCart = this.cartItems.filter((p) => p.id !== product.id)
-        this.emitUpdatedCart(updatedCart)
-    }
-
     private get cartItems(): Product[] {
         return this.cartSubject.getValue()
     }
@@ -70,7 +78,7 @@ export class CartService {
         return this.cartItems.find((p) => p.id === product.id)
     }
 
-    private emitUpdatedCart(cart: Product[]): void {
-        this.cartSubject.next([...cart])
+    private emitUpdatedCart(cart: Product[]) {
+        this.cartSubject.next(cart)
     }
 }
