@@ -9,11 +9,8 @@ import { CommonModule } from "@angular/common"
 import { ProductFilterModule } from "../../components/product-filter/product-filter.module"
 import { CardProductModule } from "../card-product/card-product.module"
 
-// impoprt pipes
-import { ChangeBackgroundPipe } from "../../pipes/change-background.pipe"
-
 @NgModule({
-    declarations: [ShowProductComponent, ChangeBackgroundPipe],
+    declarations: [ShowProductComponent],
     imports: [CommonModule, ProductFilterModule, CardProductModule],
     exports: [ShowProductComponent],
 })
