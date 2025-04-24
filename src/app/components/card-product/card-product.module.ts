@@ -9,8 +9,11 @@ import { CardProductComponent } from "./card-product/card-product.component"
 import { MatCardModule } from "@angular/material/card"
 import { UpdateQuantityModule } from "../update-quantity/update-quantity.module"
 
+// import pipes
+import { ChangeBackgroundPipe } from "../../pipes/change-background.pipe"
+
 @NgModule({
-    declarations: [CardProductComponent],
+    declarations: [CardProductComponent, ChangeBackgroundPipe],
     imports: [CommonModule, MatCardModule, UpdateQuantityModule],
     exports: [CardProductComponent],
 })
