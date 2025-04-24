@@ -1,12 +1,5 @@
 <app-navbar />
 
-<section class="filter-section">
-    <app-product-filter
-        [categories]="categories"
-        (filterChange)="onFilterChange($event)"
-    ></app-product-filter>
-</section>
-
 <section class="marquee-wrapper">
     <div class="marquee">
         <span class="marquee__text"
@@ -16,4 +9,4 @@
     </div>
 </section>
 
-<app-show-product [showProducts]="productsDisplay"></app-show-product>
+<app-show-product></app-show-product>
