@@ -25,7 +25,7 @@
         <div class="update-quantity">
             <app-update-quantity
                 [product]="product"
-                [quantity]="product.quantity || 0"
+                [quantity]="getProductQuantity(product)"
                 (quantityChange)="onQuantityChange($event)"
             ></app-update-quantity>
         </div>

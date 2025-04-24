@@ -28,10 +28,14 @@ export class DialogButtonComponent {
     }
 
     openDialog(): void {
-        this.dialog.open(CheckoutDialogComponent, {
+        const dialogRef = this.dialog.open(CheckoutDialogComponent, {
             width: "400px",
             height: "400px",
             data: { cart: this.cart },
+        })
+
+        dialogRef.afterClosed().subscribe(() => {
+            console.log("The dialog was closed")
         })
     }
 }

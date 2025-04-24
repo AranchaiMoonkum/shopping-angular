@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core"
+import { Component, inject, OnInit } from "@angular/core"
 import { MatDialogRef } from "@angular/material/dialog"
 import { Product } from "../../../types/interface"
 import { CartService } from "../../../services/cart.service"
@@ -15,9 +15,10 @@ export class CheckoutDialogComponent implements OnInit {
     cart$!: Observable<Product[]>
     totalPrice$!: Observable<number>
 
+    readonly dialogRef = inject(MatDialogRef<CheckoutDialogComponent>)
+
     constructor(
         private readonly cartService: CartService,
-        public dialogRef: MatDialogRef<CheckoutDialogComponent>,
         private readonly _snackBar: MatSnackBar
     ) {}
 

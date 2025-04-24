@@ -2,6 +2,7 @@ import { ProductService } from "./../../../services/product.service"
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core"
 import { Product } from "../../../types/interface"
 import { ApiService } from "../../../services/api.service"
+import { CartService } from "../../../services/cart.service"
 
 @Component({
     selector: "app-show-product",
@@ -26,7 +27,8 @@ export class ShowProductComponent implements OnInit {
 
     constructor(
         private readonly apiService: ApiService,
-        private readonly productService: ProductService
+        private readonly productService: ProductService,
+        private readonly cartService: CartService
     ) {}
 
     ngOnInit(): void {
@@ -47,6 +49,12 @@ export class ShowProductComponent implements OnInit {
                         }),
                 ]
             })
+    }
+
+    updateProductQuantity() {
+        this.products.forEach((product) => {
+            product.quantity = this.cartService.getProductQuantity(product)
+        })
     }
 
     trackById(index: number, product: Product) {
