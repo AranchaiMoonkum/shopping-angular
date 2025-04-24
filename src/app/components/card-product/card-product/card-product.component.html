@@ -1,8 +1,12 @@
-<mat-card class="product col-12 col-md-3">
+<mat-card
+    class="product col-12 col-md-3"
+    [ngStyle]="{
+        'background-color': this.getProductQuantity(product) | changeBackground
+    }"
+>
     <mat-card-header>
         <img
             class="product__image"
-            mat-card-lg-image
             src="{{ product.image }}"
             alt="{{ product.title }}"
         />
@@ -19,7 +23,11 @@
         </div>
 
         <div class="update-quantity">
-            <app-update-quantity></app-update-quantity>
+            <app-update-quantity
+                [product]="product"
+                [quantity]="product.quantity || 0"
+                (quantityChange)="onQuantityChange($event)"
+            ></app-update-quantity>
         </div>
 
         <p class="product__price">{{ product.price | currency }}</p>
