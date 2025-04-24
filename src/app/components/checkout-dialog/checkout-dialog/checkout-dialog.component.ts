@@ -16,9 +16,9 @@ export class CheckoutDialogComponent implements OnInit {
     totalPrice$!: Observable<number>
 
     constructor(
-        private cartService: CartService,
+        private readonly cartService: CartService,
         public dialogRef: MatDialogRef<CheckoutDialogComponent>,
-        private _snackBar: MatSnackBar
+        private readonly _snackBar: MatSnackBar
     ) {}
 
     ngOnInit(): void {
