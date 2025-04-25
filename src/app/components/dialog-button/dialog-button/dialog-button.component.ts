@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component } from "@angular/core"
 import { MatDialog } from "@angular/material/dialog"
 import { CartService } from "../../../services/cart.service"
 import { Product } from "../../../types/interface"
-import { Observable } from "rxjs"
 import { CheckoutDialogComponent } from "../../checkout-dialog/checkout-dialog/checkout-dialog.component"
 import { ProductService } from "../../../services/product.service"
+import { Observable } from "rxjs"
 
 @Component({
     selector: "app-dialog-button",
@@ -13,14 +13,14 @@ import { ProductService } from "../../../services/product.service"
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DialogButtonComponent {
+    cart: Product[] = []
+    totalQuantity$ = new Observable<number>()
+
     constructor(
         private readonly cartService: CartService,
         private readonly productService: ProductService,
         private readonly dialog: MatDialog
     ) {}
-
-    cart: Product[] = []
-    totalQuantity$ = new Observable<number>()
 
     ngOnInit(): void {
         this.cartService.getCart().subscribe((data: Product[]) => {
