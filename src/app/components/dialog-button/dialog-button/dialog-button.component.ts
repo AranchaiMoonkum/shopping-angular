@@ -4,6 +4,7 @@ import { CartService } from "../../../services/cart.service"
 import { Product } from "../../../types/interface"
 import { Observable } from "rxjs"
 import { CheckoutDialogComponent } from "../../checkout-dialog/checkout-dialog/checkout-dialog.component"
+import { ProductService } from "../../../services/product.service"
 
 @Component({
     selector: "app-dialog-button",
@@ -14,6 +15,7 @@ import { CheckoutDialogComponent } from "../../checkout-dialog/checkout-dialog/c
 export class DialogButtonComponent {
     constructor(
         private readonly cartService: CartService,
+        private readonly productService: ProductService,
         private readonly dialog: MatDialog
     ) {}
 
@@ -36,6 +38,7 @@ export class DialogButtonComponent {
 
         dialogRef.afterClosed().subscribe(() => {
             console.log("The dialog was closed")
+            this.productService.notifyQuantityChange()
         })
     }
 }
