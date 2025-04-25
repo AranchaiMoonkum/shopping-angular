@@ -1,15 +1,7 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    Input,
-    OnDestroy,
-} from "@angular/core"
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core"
 import { Product } from "../../../types/interface"
 import { ProductService } from "../../../services/product.service"
 import { CartService } from "../../../services/cart.service"
-import { Subscription } from "rxjs"
 
 @Component({
     selector: "app-card-product",
@@ -20,12 +12,9 @@ import { Subscription } from "rxjs"
 export class CardProductComponent {
     @Input() product!: Product
 
-    private readonly sub!: Subscription
-
     constructor(
         private readonly productService: ProductService,
-        private readonly cartService: CartService,
-        private readonly cdr: ChangeDetectorRef
+        private readonly cartService: CartService
     ) {}
 
     getStarPercentage(rate: number): string {

@@ -52,9 +52,16 @@ export class CartService {
     }
 
     updateProductQuantity(product: Product, quantity: number) {
-        const cart = this.cartItems.filter((p) => p.id !== product.id)
+        const cart = [...this.cartItems]
+        const index = cart.findIndex((p) => p.id === product.id)
 
-        if (quantity > 0) {
+        if (index !== -1) {
+            if (quantity > 0) {
+                cart[index] = { ...product, quantity }
+            } else {
+                cart.splice(index, 1)
+            }
+        } else if (quantity > 0) {
             cart.push({ ...product, quantity })
         }
 

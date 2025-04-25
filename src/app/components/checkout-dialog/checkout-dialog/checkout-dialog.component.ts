@@ -27,6 +27,10 @@ export class CheckoutDialogComponent implements OnInit {
         this.totalPrice$ = this.cartService.totalPrice$
     }
 
+    getProductQuantity(product: Product): number {
+        return this.cartService.getProductQuantity(product)
+    }
+
     updateQuantity(product: Product, newQuantity: number) {
         this.cartService.updateProductQuantity(product, newQuantity)
     }

@@ -25,7 +25,7 @@
                     >
                         <app-update-quantity
                             [product]="product"
-                            [quantity]="product.quantity"
+                            [quantity]="getProductQuantity(product)"
                             (quantityChange)="updateQuantity(product, $event)"
                         ></app-update-quantity>
                         <button
