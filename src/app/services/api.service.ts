@@ -14,9 +14,7 @@ export class ApiService {
             .get<Product[]>("https://fakestoreapi.com/products")
             .pipe(
                 map((products) => {
-                    return {
-                        products: products,
-                    }
+                    return { products: products }
                 })
             )
     }

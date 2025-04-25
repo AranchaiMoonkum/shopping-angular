@@ -7,7 +7,6 @@ import { Product } from "../types/interface"
 })
 export class ProductService {
     private readonly products$ = new Subject<Product[]>()
-    private readonly quantityChange$ = new Subject<void>()
 
     product: Product[] = []
 
@@ -24,13 +23,5 @@ export class ProductService {
 
     getTimeStamp() {
         return Math.random()
-    }
-
-    notifyQuantityChange() {
-        this.quantityChange$.next()
-    }
-
-    onQuantityChange(): Observable<void> {
-        return this.quantityChange$.asObservable()
     }
 }

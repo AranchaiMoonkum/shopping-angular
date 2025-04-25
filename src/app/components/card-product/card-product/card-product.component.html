@@ -16,16 +16,14 @@
         <div class="product__wrapper">
             <div class="product__details">
                 <h2 class="product__title">{{ product.title }}</h2>
-                <h2 class="product__category">
-                    {{ product.category }}
-                </h2>
+                <h2 class="product__category">{{ product.category }}</h2>
             </div>
         </div>
 
         <div class="update-quantity">
             <app-update-quantity
                 [product]="product"
-                [quantity]="quantity"
+                [quantity]="getProductQuantity(product)"
                 (quantityChange)="onQuantityChange($event)"
             ></app-update-quantity>
         </div>

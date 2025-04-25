@@ -3,7 +3,6 @@ import { MatDialog } from "@angular/material/dialog"
 import { CartService } from "../../../services/cart.service"
 import { Product } from "../../../types/interface"
 import { CheckoutDialogComponent } from "../../checkout-dialog/checkout-dialog/checkout-dialog.component"
-import { ProductService } from "../../../services/product.service"
 import { Observable } from "rxjs"
 
 @Component({
@@ -18,7 +17,6 @@ export class DialogButtonComponent {
 
     constructor(
         private readonly cartService: CartService,
-        private readonly productService: ProductService,
         private readonly dialog: MatDialog
     ) {}
 
@@ -38,7 +36,6 @@ export class DialogButtonComponent {
 
         dialogRef.afterClosed().subscribe(() => {
             console.log("The dialog was closed")
-            this.productService.notifyQuantityChange()
         })
     }
 }
