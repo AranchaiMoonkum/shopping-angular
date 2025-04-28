@@ -1,9 +1,18 @@
+<!-- 
+  Product card component that displays product information with interactive elements
+  Card background changes color based on quantity in cart (using custom pipe)
+-->
 <mat-card
     class="product col-12 col-md-3"
     [ngStyle]="{
         'background-color': getProductQuantity(product) | changeBackground
     }"
+    attr.aria-label="Product card for {{ product.title }}"
 >
+    <!--
+      Product image with proper alt text for accessibility
+      Image is loaded dynamically from the product data
+    -->
     <mat-card-header>
         <img
             class="product__image"
@@ -12,14 +21,25 @@
         />
     </mat-card-header>
 
+    <!-- Card content with product details-->
     <mat-card-content>
+        <!-- Product title and category section -->
         <div class="product__wrapper">
             <div class="product__details">
+                <!-- Product title displayed prominently -->
                 <h2 class="product__title">{{ product.title }}</h2>
+
+                <!-- Product category for classification -->
                 <h2 class="product__category">{{ product.category }}</h2>
             </div>
         </div>
 
+        <!--
+          Quantity control section
+          Uses the update-quantity component with two-way binding:
+          - Passes current product and its quantity as inputs
+          - Receives quantity changes via the quantityChange output event
+        -->
         <div class="update-quantity">
             <app-update-quantity
                 [product]="product"
@@ -28,11 +48,18 @@
             ></app-update-quantity>
         </div>
 
+        <!-- Product price with currency formatting -->
         <p class="product__price">{{ product.price | currency }}</p>
 
+        <!-- Timestamp showing when product data was last updated -->
         <p>{{ getTimeStamp() }}</p>
 
-        <div class="star-rating">
+        <!--
+          Star rating visualization
+          Uses CSS to display a filled portion of stars based on rating percentage
+          The width of filled stars is dynamically calculated from the product rating
+        -->
+        <div class="star-rating" attr.aria-label="Product rating: {{product.rating.rate}} out of 5 stars">
             <div
                 class="star-rating__filled"
                 [ngStyle]="{
