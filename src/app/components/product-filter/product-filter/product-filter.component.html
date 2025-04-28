@@ -1,24 +1,35 @@
+<!-- Main container for filter controls with reactive form binding -->
 <div class="product-filter" [formGroup]="filterForm">
-    <!-- filter by category -->
+    <!-- Category filter dropdown -->
     <mat-form-field>
         <mat-label>Category:</mat-label>
+        <!--
+            Category selection dropdown with two-way binding
+            Triggers onCategoryChange when selection changes
+        -->
         <mat-select
             formControlName="category"
             (selectionChange)="onCategoryChange()"
         >
+            <!-- Dynamic list of categories from parent component -->
             <mat-option *ngFor="let category of categories" [value]="category">
                 {{ category | titlecase }}
             </mat-option>
         </mat-select>
     </mat-form-field>
 
-    <!-- sort by -->
+    <!-- Sort options dropdown -->
     <mat-form-field>
         <mat-label>Sort By:</mat-label>
+        <!--
+            Sort selection dropdown with two-way binding
+            Triggers onSortChange when selection changes
+        -->
         <mat-select
             formControlName="sort"
             (selectionChange)="onSortChange()"
         >
+            <!-- Predefined sort options from component -->
             <mat-option
                 *ngFor="let option of sortOptions"
                 [value]="option.value"
@@ -28,9 +39,13 @@
         </mat-select>
     </mat-form-field>
 
-    <!-- search product -->
+    <!-- Search input field -->
     <mat-form-field>
         <mat-label>Search</mat-label>
+        <!--
+            Text input with two-way binding
+            Uses onSearchChange for debounced filtering
+        -->
         <input
             matInput
             formControlName="search"
@@ -38,6 +53,11 @@
             (input)="onSearchChange($event)"
             aria-label="Search products"
         />
+        <!--
+            Clear button shown only when search has a value
+            Calls onSearchClear to clear the input
+        -->
+        <span id="search-help" class="mat-hint">Text input with two-way binding. Uses onSearchChange for debounced filtering.</span>
         <button *ngIf="searchControl?.value" matSuffix mat-icon-button aria-label="Clear search" (click)="onSearchClear()">
             <mat-icon>clear</mat-icon>
         </button>
