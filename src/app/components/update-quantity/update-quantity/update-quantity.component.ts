@@ -19,13 +19,16 @@ export class UpdateQuantityComponent {
         this.emitQuantityChange()
     }
 
-    decreaseQuantity() {
+    decreaseQuantity(): void {
         this.quantity = Math.max(this.quantity - 1, this.MIN_QUANTITY)
         this.emitQuantityChange()
     }
 
     onInputChange(event: Event) {
-        const input = (event.target as HTMLInputElement).value
+        const target = (event.target as HTMLInputElement) || null
+        if (!target) return
+
+        const input = target.value
         const newQuantity = Math.min(
             this.MAX_QUANTITY,
             Math.max(this.MIN_QUANTITY, +input)
