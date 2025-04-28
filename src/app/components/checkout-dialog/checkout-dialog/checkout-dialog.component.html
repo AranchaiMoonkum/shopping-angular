@@ -1,37 +1,49 @@
+<!-- Dialog title - tells users they're in the checkout process -->
 <h2 mat-dialog-title class="checkout-dialog__header">Checkout</h2>
 
+<!-- Dialog content area - contains the cart items list -->
 <mat-dialog-content>
+    <!-- List of items in the shopping cart -->
     <ul class="cart-items">
+        <!-- Dynamic list generated from cart$ observable -->
         <li *ngFor="let product of cart$ | async" class="cart-items__item">
             <div class="checkout-container">
                 <section class="checkout-wrapper">
+                    <!-- Product information section (image, title, price) -->
                     <div class="cart-items__details">
+                        <!-- Product image with proper alt text for accessibility -->
                         <img
                             [src]="product.image"
                             alt="{{ product.title }}"
                             class="cart-items__image"
                         />
+                        <!-- Product title with tooltip for long titles -->
                         <span
                             class="cart-items__title"
                             matTooltip="{{ product.title }}"
                             >{{ product.title }}</span
                         >
+                        <!-- Product price formatted as currency -->
                         <span class="cart-items__price">{{
                             product.price | currency
                         }}</span>
                     </div>
-                    <div
-                        class="cart-items__details cart-items__details--quantity"
-                    >
+
+                    <!-- Quantity controls section (update-quantity component and remove button) -->
+                    <div class="cart-items__details cart-items__details--quantity">
+                        <!-- 
+                            Quantity control component with two-way binding:
+                            - Passes product and current quantity as inputs
+                            - Updates quantity when changed via output event
+                        -->
                         <app-update-quantity
                             [product]="product"
                             [quantity]="getProductQuantity(product)"
                             (quantityChange)="updateQuantity(product, $event)"
                         ></app-update-quantity>
-                        <button
-                            (click)="removeOnClick(product)"
-                            class="cart-items__delete"
-                        >
+
+                        <!-- Remove button - deletes item from cart -->
+                        <button (click)="removeOnClick(product)" class="cart-items__delete">
                             Remove
                         </button>
                     </div>
@@ -41,19 +53,26 @@
     </ul>
 </mat-dialog-content>
 
+<!-- Dialog actions area - contains total price and action buttons -->
 <mat-dialog-actions align="end" class="checkout-dialog__actions">
-    <h2>
+    <!-- Total price display - updates reactively with cart changes -->
+    <h2 aria-live="polite">
         Total price: <span>{{ totalPrice$ | async | currency }}</span>
     </h2>
 
+    <!-- Action buttons section-->
     <section>
-        <button mat-button color="primary" (click)="checkoutCart()">
+        <!-- Checkout button - processes the purchase -->
+        <button mat-button color="primary" (click)="checkoutCart()" aria-label="Complete checkout">
             Checkout
         </button>
+
+        <!-- Close button - dismisses dialog and returns to shopping -->
         <button
             mat-button
             (click)="onClose()"
             color="accent"
+            aria-label="Close checkout dialog"
         >
             Close
         </button>
