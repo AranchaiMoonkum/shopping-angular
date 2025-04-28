@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core"
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core"
 import { MatDialog } from "@angular/material/dialog"
 import { CartService } from "../../../services/cart.service"
 import { Product } from "../../../types/interface"
 import { CheckoutDialogComponent } from "../../checkout-dialog/checkout-dialog/checkout-dialog.component"
-import { Observable } from "rxjs"
+import { Observable, Subscription } from "rxjs"
 
 @Component({
     selector: "app-dialog-button",
@@ -11,9 +11,10 @@ import { Observable } from "rxjs"
     styleUrl: "./dialog-button.component.scss",
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DialogButtonComponent {
+export class DialogButtonComponent implements OnInit, OnDestroy {
     cart: Product[] = []
     totalQuantity$ = new Observable<number>()
+    private readonly subscriptions = new Subscription()
 
     constructor(
         private readonly cartService: CartService,
@@ -21,10 +22,17 @@ export class DialogButtonComponent {
     ) {}
 
     ngOnInit(): void {
-        this.cartService.getCart().subscribe((data: Product[]) => {
-            this.cart = data
-            this.totalQuantity$ = this.cartService.totalQuantity$
-        })
+        this.totalQuantity$ = this.cartService.totalQuantity$
+
+        this.subscriptions.add(
+            this.cartService.getCart().subscribe((data: Product[]) => {
+                this.cart = data
+            })
+        )
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe()
     }
 
     openDialog(): void {
