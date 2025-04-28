@@ -13,7 +13,7 @@ import { Observable, Subscription } from "rxjs"
 })
 export class DialogButtonComponent implements OnInit, OnDestroy {
     cart: Product[] = []
-    totalQuantity$ = new Observable<number>()
+    totalQuantity$!: Observable<number>
     private readonly subscriptions = new Subscription()
 
     constructor(
@@ -42,9 +42,10 @@ export class DialogButtonComponent implements OnInit, OnDestroy {
             data: { cart: this.cart },
         })
 
-        dialogRef.afterClosed().subscribe((cart) => {
-            console.log("Dialog closed")
-            console.log("The dialog was closed")
-        })
+        this.subscriptions.add(
+            dialogRef.afterClosed().subscribe(() => {
+                console.log("The dialog was closed")
+            })
+        )
     }
 }
