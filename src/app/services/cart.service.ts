@@ -35,8 +35,12 @@ export class CartService {
         return this.cartSubject.asObservable()
     }
 
+    getCartValue(): Product[] {
+        return this.cartSubject.getValue()
+    }
+
     addProductQuantity(product: Product) {
-        const cart = this.cartItems
+        const cart = this.getCartValue()
         const existingProduct = this.findProduct(product)
 
         if (existingProduct) {
@@ -50,14 +54,14 @@ export class CartService {
     }
 
     removeProductFromCart(product: Product) {
-        const updatedCart = this.cartItems.filter((p) => p.id !== product.id)
+        const updatedCart = this.getCartValue().filter((p) => p.id !== product.id)
 
         this.emitUpdatedCart(updatedCart)
         return product.id
     }
 
     updateProductQuantity(product: Product, quantity: number) {
-        const cart = [...this.cartItems]
+        const cart = [...this.getCartValue()]
         const index = cart.findIndex((p) => p.id === product.id)
 
         if (index !== -1) {
@@ -79,23 +83,15 @@ export class CartService {
     }
 
     isEmptyCart(): boolean {
-        return this.cartItems.length === 0
+        return this.getCartValue().length === 0
     }
 
     refreshCart(changedProductIds?: number[]): void {
         this.refreshCartSource.next(changedProductIds || [])
     }
 
-    getCartValue(): Product[] {
-        return this.cartSubject.getValue()
-    }
-
-    private get cartItems(): Product[] {
-        return this.cartSubject.getValue()
-    }
-
     private findProduct(product: Product): Product | undefined {
-        return this.cartItems.find((p) => p.id === product.id)
+        return this.getCartValue().find((p) => p.id === product.id)
     }
 
     private emitUpdatedCart(cart: Product[]) {
