@@ -1,27 +1,34 @@
 import { Injectable } from "@angular/core"
-import { Observable, Subject } from "rxjs"
+import { BehaviorSubject, Observable } from "rxjs"
 import { Product } from "../types/interface"
 
 @Injectable({
     providedIn: "root",
 })
 export class ProductService {
-    private readonly products$ = new Subject<Product[]>()
+    // use BehaviorSubject to store the products
+    private readonly productSubject = new BehaviorSubject<Product[]>([])
 
-    product: Product[] = []
+    // expose only the observable, not the subject
+    readonly products$ = this.productSubject.asObservable()
 
     constructor() {}
 
+    // returns an observable of the products 
     getProducts(): Observable<Product[]> {
-        return this.products$.asObservable()
+        return this.products$
     }
 
-    setProducts(product: Product[]): void {
-        this.product = product
-        this.products$.next(this.product)
+    // updates the products collection
+    setProducts(products: Product[]): void {
+        this.productSubject.next(products)
+    }
+
+    getCurrentProducts(): Product[] {
+        return this.productSubject.getValue()
     }
 
     getTimeStamp() {
-        return Math.random()
+        return Date.now()
     }
 }
