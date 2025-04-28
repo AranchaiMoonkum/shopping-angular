@@ -16,3 +16,9 @@ export interface Sort {
     value: string
     label: string
 }
+
+export interface ProductFilters { 
+    category: string
+    sort: string
+    search: string;
+}

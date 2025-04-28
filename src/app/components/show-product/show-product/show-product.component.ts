@@ -1,6 +1,11 @@
 import { ProductService } from "./../../../services/product.service"
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core"
-import { Product } from "../../../types/interface"
+import {
+    ChangeDetectionStrategy,
+    Component,
+    OnDestroy,
+    OnInit,
+} from "@angular/core"
+import { Product, ProductFilters } from "../../../types/interface"
 import { ApiService } from "../../../services/api.service"
 import { CartService } from "../../../services/cart.service"
 import { Subscription } from "rxjs"
@@ -8,7 +13,7 @@ import { Subscription } from "rxjs"
 @Component({
     selector: "app-show-product",
     templateUrl: "./show-product.component.html",
-    styleUrl: "./show-product.component.scss",
+    styleUrls: ["./show-product.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShowProductComponent implements OnInit, OnDestroy {
@@ -35,28 +40,31 @@ export class ShowProductComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-        this.apiService
-            .getProducts()
-            .subscribe((data: { products: Product[] }) => {
-                this.productService.setProducts(data.products)
-                this.products = data.products
+        this.subscriptions.add(
+            this.apiService.getProducts().subscribe({
+                next: (data: { products: Product[] }) => {
+                    this.productService.setProducts(data.products)
+                    this.products = data.products
 
-                this.productsDisplay = this.products
+                    this.productsDisplay = this.products
 
-                this.categories = [
-                    "all",
-                    ...this.products
-                        .map((p) => p.category)
-                        .filter((value, index, self) => {
-                            return self.indexOf(value) === index
-                        }),
-                ]
+                    this.categories = [
+                        "all",
+                        ...new Set(this.products.map((p) => p.category)),
+                    ]
+                },
+                error: (err) => {
+                    console.error("Error fetching products:", err)
+                },
             })
+        )
 
         this.subscriptions.add(
-            this.cartService.refreshCart$.subscribe((changedProductIds: number[]) => {
-                this.updateProductQuantitiesSelectively(changedProductIds)
-            })
+            this.cartService.refreshCart$.subscribe(
+                (changedProductIds: number[]) => {
+                    this.updateProductQuantitiesSelectively(changedProductIds)
+                }
+            )
         )
     }
 
@@ -65,27 +73,27 @@ export class ShowProductComponent implements OnInit, OnDestroy {
     }
 
     updateProductQuantitiesSelectively(productIds: number[]): void {
-        for (const id of productIds) {
-            const product = this.products.find((p) => p.id === id)
-            if (product) { product.quantity = this.cartService.getProductQuantity(product) }
-        }
-    }
-
-    updateProductQuantity() {
-        this.products.forEach((product) => {
-            product.quantity = this.cartService.getProductQuantity(product)
+        this.products = this.products.map((product) => {
+            if (productIds.includes(product.id)) {
+                return {
+                    ...product,
+                    quantity: this.cartService.getProductQuantity(product),
+                }
+            }
+            return product
         })
+
+        const productLookup = new Map(this.products.map((product) => [product.id, product]))
+        this.productsDisplay = this.productsDisplay.map(
+            (product) => productLookup.get(product.id) || product
+        )
     }
 
     trackById(index: number, product: Product) {
         return product.id
     }
 
-    onFilterChange(filters: {
-        category: string
-        sort: string
-        search: string
-    }) {
+    onFilterChange(filters: ProductFilters): void {
         if (filters.category === "all") {
             this.productsDisplay = [...this.products]
         } else {
@@ -107,7 +115,5 @@ export class ShowProductComponent implements OnInit, OnDestroy {
                     .includes(filters.search.toLowerCase())
             )
         }
-
-        return this.productsDisplay
     }
 }
