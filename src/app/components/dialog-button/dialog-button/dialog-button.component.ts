@@ -34,7 +34,8 @@ export class DialogButtonComponent {
             data: { cart: this.cart },
         })
 
-        dialogRef.afterClosed().subscribe(() => {
+        dialogRef.afterClosed().subscribe((cart) => {
+            console.log("Dialog closed")
             console.log("The dialog was closed")
         })
     }

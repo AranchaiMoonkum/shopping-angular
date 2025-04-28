@@ -23,6 +23,7 @@ mat-dialog-content {
     display: flex;
     flex-direction: column;
     list-style: none;
+    padding-left: 0rem !important;
 
     .cart-items__item {
         display: flex;

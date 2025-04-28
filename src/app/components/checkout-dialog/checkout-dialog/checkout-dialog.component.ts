@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from "@angular/core"
+import { Component, inject, OnInit } from "@angular/core"
 import { MatDialogRef } from "@angular/material/dialog"
 import { Product } from "../../../types/interface"
 import { CartService } from "../../../services/cart.service"
@@ -19,7 +19,6 @@ export class CheckoutDialogComponent implements OnInit {
 
     constructor(
         private readonly cartService: CartService,
-        private readonly cdr: ChangeDetectorRef,
         private readonly _snackBar: MatSnackBar
     ) {}
 

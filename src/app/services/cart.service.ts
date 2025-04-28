@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Injectable } from "@angular/core"
+import { Injectable } from "@angular/core"
 import { BehaviorSubject, map, Observable } from "rxjs"
 import { Product } from "../types/interface"
 
