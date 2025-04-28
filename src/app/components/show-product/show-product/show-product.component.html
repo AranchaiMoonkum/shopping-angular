@@ -1,3 +1,4 @@
+<!-- Product filter section - allows filtering by category and search term -->
 <section class="filter-section">
     <app-product-filter
         [categories]="categories"
@@ -5,7 +6,8 @@
     ></app-product-filter>
 </section>
 
-<section class="marquee-wrapper">
+<!-- Promotional banner with scrolling text -->
+<section class="marquee-wrapper" aria-label="Promotional message">
     <div class="marquee">
         <span class="marquee__text"
             >Welcome to our shopping website. We have a wide range of products
@@ -14,11 +16,21 @@
     </div>
 </section>
 
+<!-- Main product display grid section -->
 <section class="product-section">
+    <!-- Container for product cards with optimized rendering -->
     <div class="container product-row">
+        <!--
+            Using ng-container to avoid extra DOM elements
+            trackBy helps optimize rendering performance by reusing DOM elements
+        -->
         <ng-container
             *ngFor="let product of productsDisplay; trackBy: trackById"
         >
+            <!--
+                Individual product card component
+                Each card receives product data as input
+            -->
             <app-card-product [product]="product"></app-card-product>
         </ng-container>
     </div>
