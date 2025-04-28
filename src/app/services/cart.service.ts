@@ -11,34 +11,34 @@ export class CartService {
     private readonly refreshCartSource = new Subject<number[]>()
     refreshCart$ = this.refreshCartSource.asObservable()
 
+    // observable that emits the total quantity of product in the cart
     readonly totalQuantity$: Observable<number> = this.cartSubject.pipe(
-        map((cart) => {
-            let quantity = 0
-            cart.forEach((product) => {
-                quantity += product.quantity
-            })
-            return quantity
-        })
+        map((cart) =>
+            cart.reduce((total, product) => total + product.quantity, 0)
+        )
     )
 
+    // observable that emits the total price of product in the cart
     readonly totalPrice$: Observable<number> = this.cartSubject.pipe(
-        map((cart) => {
-            let price = 0
-            cart.forEach((product) => {
-                price += product.price * product.quantity
-            })
-            return price
-        })
+        map((cart) =>
+            cart.reduce(
+                (total, product) => total + product.price * product.quantity,
+                0
+            )
+        )
     )
 
+    // returns as observable of the cart
     getCart() {
         return this.cartSubject.asObservable()
     }
 
+    // return the current value of the cart
     getCartValue(): Product[] {
         return this.cartSubject.getValue()
     }
 
+    //  adds a product to the cart or increases the quantity of the product in the cart
     addProductQuantity(product: Product) {
         const cart = this.getCartValue()
         const existingProduct = this.findProduct(product)
@@ -53,13 +53,23 @@ export class CartService {
         this.emitUpdatedCart(cart)
     }
 
+    /**
+     * removes a product from the cart and updates the cart state
+     * @returns the id of the removed product from the cart
+     */
     removeProductFromCart(product: Product) {
-        const updatedCart = this.getCartValue().filter((p) => p.id !== product.id)
+        const updatedCart = this.getCartValue().filter(
+            (p) => p.id !== product.id
+        )
 
         this.emitUpdatedCart(updatedCart)
         return product.id
     }
 
+    /**
+     * updates the quantity of a product in the cart and updates the cart state
+     * @returns the ID of the updated product from the cart
+     */
     updateProductQuantity(product: Product, quantity: number) {
         const cart = [...this.getCartValue()]
         const index = cart.findIndex((p) => p.id === product.id)
@@ -78,22 +88,30 @@ export class CartService {
         return product.id
     }
 
+    // gets the quantity of a product in the cart
     getProductQuantity(product: Product): number {
         return this.findProduct(product)?.quantity ?? 0
     }
 
+    // checks if the cart is empty
     isEmptyCart(): boolean {
         return this.getCartValue().length === 0
     }
 
+    /**
+     * triggers a refresh event for products in the cart
+     * @param changedProductIds optional array of product
+     */
     refreshCart(changedProductIds?: number[]): void {
         this.refreshCartSource.next(changedProductIds || [])
     }
 
+    // finds a product in the cart by its ID
     private findProduct(product: Product): Product | undefined {
         return this.getCartValue().find((p) => p.id === product.id)
     }
 
+    // updates the cart BehaviorSubject with new data
     private emitUpdatedCart(cart: Product[]) {
         this.cartSubject.next(cart)
     }
