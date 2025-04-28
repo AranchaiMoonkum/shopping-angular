@@ -1,9 +1,22 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core"
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    OnDestroy,
+    OnInit,
+} from "@angular/core"
 import { MatDialog } from "@angular/material/dialog"
 import { CartService } from "../../../services/cart.service"
 import { Product } from "../../../types/interface"
 import { CheckoutDialogComponent } from "../../checkout-dialog/checkout-dialog/checkout-dialog.component"
-import { BehaviorSubject, combineLatest, map, Observable, Subscription, tap } from "rxjs"
+import {
+    BehaviorSubject,
+    combineLatest,
+    map,
+    Observable,
+    Subscription,
+    tap,
+} from "rxjs"
 
 @Component({
     selector: "app-dialog-button",
@@ -22,13 +35,13 @@ export class DialogButtonComponent implements OnInit, OnDestroy {
     constructor(
         private readonly cartService: CartService,
         private readonly dialog: MatDialog,
-        private readonly cdr: ChangeDetectorRef,
+        private readonly cdr: ChangeDetectorRef
     ) {}
 
     ngOnInit(): void {
         this.displayQuantity$ = combineLatest([
             this.cartService.totalQuantity$,
-            this.isDialogOpen
+            this.isDialogOpen,
         ]).pipe(
             map(([totalQuantity, isDialogOpen]) => {
                 if (isDialogOpen) {
@@ -47,15 +60,15 @@ export class DialogButtonComponent implements OnInit, OnDestroy {
         )
 
         this.subscriptions.add(
-            combineLatest([
-                this.cartService.totalQuantity$,
-                this.isDialogOpen
-            ])
-            .pipe(
-                tap(([totalQuantity, isDialogOpen]) => {
-                    if (!isDialogOpen) { this.frozenQuantity = totalQuantity }
-                })
-            ).subscribe()
+            combineLatest([this.cartService.totalQuantity$, this.isDialogOpen])
+                .pipe(
+                    tap(([totalQuantity, isDialogOpen]) => {
+                        if (!isDialogOpen) {
+                            this.frozenQuantity = totalQuantity
+                        }
+                    })
+                )
+                .subscribe()
         )
     }
 
@@ -81,22 +94,30 @@ export class DialogButtonComponent implements OnInit, OnDestroy {
 
                 if (returnedProducts) {
                     const changedProductIds: number[] = []
-                    
-                    originalCart.forEach(originalProduct => {
-                        const returnedProduct = returnedProducts.find(p => p.id === originalProduct.id);
-                        if (!returnedProduct || returnedProduct.quantity !== originalProduct.quantity) {
-                            changedProductIds.push(originalProduct.id);
+
+                    originalCart.forEach((originalProduct) => {
+                        const returnedProduct = returnedProducts.find(
+                            (p) => p.id === originalProduct.id
+                        )
+                        if (
+                            !returnedProduct ||
+                            returnedProduct.quantity !==
+                                originalProduct.quantity
+                        ) {
+                            changedProductIds.push(originalProduct.id)
                         }
                     })
 
-                    returnedProducts.forEach(product => {
+                    returnedProducts.forEach((product) => {
                         if (!originalIds.has(product.id)) {
                             changedProductIds.push(product.id)
                         }
                     })
-                    
+
                     // refresh cart data after dialog is closed
-                    this.cartService.refreshCart(Array.from(new Set(changedProductIds)))
+                    this.cartService.refreshCart(
+                        Array.from(new Set(changedProductIds))
+                    )
                     this.cdr.detectChanges()
                 } else {
                     console.log("Dialog closed without data")
