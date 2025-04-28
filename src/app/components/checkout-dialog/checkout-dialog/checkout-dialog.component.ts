@@ -61,6 +61,7 @@ export class CheckoutDialogComponent implements OnInit {
     }
 
     onClose() {
-        this.dialogRef.close()
+        const currentProducts = this.cartService.getCartValue()
+        this.dialogRef.close(currentProducts)
     }
 }
