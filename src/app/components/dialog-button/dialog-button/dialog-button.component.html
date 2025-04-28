@@ -1,7 +1,9 @@
 <div class="float_button">
     <button (click)="openDialog()" mat-icon-button>
         <mat-icon
-            matBadge="{{ totalQuantity$ | async }}"
+            aria-label="Open cart dialog"
+            [matBadge]="displayQuantity$ | async"
+            [matBadgeHidden]="(displayQuantity$ | async) === 0"
             matBadgePosition="after"
             matBadgeColor="accent"
             aria-hidden="false"
