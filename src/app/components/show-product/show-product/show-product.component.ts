@@ -1,8 +1,9 @@
 import { ProductService } from "./../../../services/product.service"
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core"
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core"
 import { Product } from "../../../types/interface"
 import { ApiService } from "../../../services/api.service"
 import { CartService } from "../../../services/cart.service"
+import { Subscription } from "rxjs"
 
 @Component({
     selector: "app-show-product",
@@ -10,12 +11,14 @@ import { CartService } from "../../../services/cart.service"
     styleUrl: "./show-product.component.scss",
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShowProductComponent implements OnInit {
+export class ShowProductComponent implements OnInit, OnDestroy {
     products: Product[] = []
     productsDisplay: Product[] = []
     categories: string[] = []
 
     selectedCategory: string = "all"
+
+    private readonly subscriptions = new Subscription()
 
     private readonly sortFunctions = {
         none: () => 0,
@@ -49,6 +52,23 @@ export class ShowProductComponent implements OnInit {
                         }),
                 ]
             })
+
+        this.subscriptions.add(
+            this.cartService.refreshCart$.subscribe((changedProductIds: number[]) => {
+                this.updateProductQuantitiesSelectively(changedProductIds)
+            })
+        )
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe()
+    }
+
+    updateProductQuantitiesSelectively(productIds: number[]): void {
+        for (const id of productIds) {
+            const product = this.products.find((p) => p.id === id)
+            if (product) { product.quantity = this.cartService.getProductQuantity(product) }
+        }
     }
 
     updateProductQuantity() {

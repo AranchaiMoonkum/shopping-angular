@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core"
-import { BehaviorSubject, map, Observable } from "rxjs"
+import { BehaviorSubject, map, Observable, Subject } from "rxjs"
 import { Product } from "../types/interface"
 
 @Injectable({
@@ -7,6 +7,9 @@ import { Product } from "../types/interface"
 })
 export class CartService {
     private readonly cartSubject = new BehaviorSubject<Product[]>([])
+
+    private readonly refreshCartSource = new Subject<number[]>()
+    refreshCart$ = this.refreshCartSource.asObservable()
 
     readonly totalQuantity$: Observable<number> = this.cartSubject.pipe(
         map((cart) => {
@@ -48,7 +51,9 @@ export class CartService {
 
     removeProductFromCart(product: Product) {
         const updatedCart = this.cartItems.filter((p) => p.id !== product.id)
+
         this.emitUpdatedCart(updatedCart)
+        return product.id
     }
 
     updateProductQuantity(product: Product, quantity: number) {
@@ -66,7 +71,7 @@ export class CartService {
         }
 
         this.emitUpdatedCart(cart)
-        console.log(cart)
+        return product.id
     }
 
     getProductQuantity(product: Product): number {
@@ -75,6 +80,14 @@ export class CartService {
 
     isEmptyCart(): boolean {
         return this.cartItems.length === 0
+    }
+
+    refreshCart(changedProductIds?: number[]): void {
+        this.refreshCartSource.next(changedProductIds || [])
+    }
+
+    getCartValue(): Product[] {
+        return this.cartSubject.getValue()
     }
 
     private get cartItems(): Product[] {
