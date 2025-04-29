@@ -57,7 +57,6 @@
             Clear button shown only when search has a value
             Calls onSearchClear to clear the input
         -->
-        <span id="search-help" class="mat-hint">Text input with two-way binding. Uses onSearchChange for debounced filtering.</span>
         <button *ngIf="searchControl?.value" matSuffix mat-icon-button aria-label="Clear search" (click)="onSearchClear()">
             <mat-icon>clear</mat-icon>
         </button>
