@@ -50,7 +50,7 @@ export class ProductFilterComponent implements OnInit {
 
     /**
      * Creates the component and initializes the filter form
-     * @param fb Angular FormBuilder for reative forms
+     * @param fb Angular FormBuilder for reactive forms
      */
     constructor(private readonly fb: FormBuilder) {
         this.filterForm = this.fb.group({
@@ -108,6 +108,7 @@ export class ProductFilterComponent implements OnInit {
     /**
      * Handles category dropdown changes
      * Updates form control and triggers filter change
+     * @param event The MatSelectChange event
      */
     onCategoryChange(event: MatSelectChange): void {
         // Update the form control
@@ -117,6 +118,7 @@ export class ProductFilterComponent implements OnInit {
     /**
      * Handles sort dropdown changes
      * Updates form control and triggers filter change
+     * @param event The MatSelectChange event
      */
     onSortChange(event: MatSelectChange): void {
         // Update the form control
@@ -125,7 +127,7 @@ export class ProductFilterComponent implements OnInit {
 
     /**
      * Handles search input with debounce
-     * @param event Input event form search field
+     * @param event Input event from search field
      */
     onSearchChange(event: Event): void {
         const searchTerm = (event.target as HTMLInputElement).value || ""
