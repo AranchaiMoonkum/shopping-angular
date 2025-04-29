@@ -1,8 +1,28 @@
+<!--
+  Main navigation toolbar component
+  Display at the top of application with fixed positioning
+-->
 <mat-toolbar class="navbar">
+    <!--
+      Primary toolbar row containing logo, title, and timestamp
+      Uses Material toolbar layout components for responsive design
+    -->
     <mat-toolbar-row class="navbar__nav">
+        <!--
+          Application logo and branding section
+          Contains the site title with home link 
+        -->
         <div class="navbar__logo">
-            <span class="navbar__title"><a href="/">Shopping Website</a></span>
+            <span class="navbar__title">
+                <!-- Site title with link to homepage -->
+                <a href="/">Shopping Website</a>
+            </span>
         </div>
+
+        <!--
+          Timestamp display showing when data was last updated
+          Updates dynamically from the ProductService
+        -->
         {{ getTimeStamp() }}
     </mat-toolbar-row>
 </mat-toolbar>
