@@ -30,9 +30,12 @@ export class CartService {
      * Automatically recalculates when cart changes
      */
     readonly totalQuantity$: Observable<number> = this.cartSubject.pipe(
-        map((cart) =>
-            cart.reduce((total, product) => total + product.quantity, 0)
-        )
+        map((cart) => {
+            let total = 0
+            for (let product of cart) { total += product.quantity }
+
+            return total
+        })
     )
 
     /** 
@@ -40,9 +43,12 @@ export class CartService {
      * Automatically recalculates when cart changes
      */
     readonly totalPrice$: Observable<number> = this.cartSubject.pipe(
-        map((cart) =>
-            cart.reduce((total, product) => total + product.price * product.quantity, 0)
-        )
+        map((cart) => {
+            let total = 0
+            for (let product of cart) { total += product.price * product.quantity }
+
+            return total
+        })
     )
 
     /**
