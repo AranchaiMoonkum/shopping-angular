@@ -57,9 +57,8 @@ export class ShowProductComponent implements OnInit, OnDestroy {
 
     /**
      * @param route Route with resolved data
-     * @param apiService Service for fetching product data
-     * @param productService Service for storing shared product state
      * @param cartService Service for managing cart operations
+     * @param cdr Reference to the change detector for manual change detection triggering
      */
     constructor(
         private readonly route: ActivatedRoute,
