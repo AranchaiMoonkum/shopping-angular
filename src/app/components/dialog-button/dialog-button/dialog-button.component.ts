@@ -14,7 +14,8 @@ import {
     combineLatest,
     map,
     Observable,
-    Subscription,
+    Subject,
+    takeUntil,
     tap,
 } from "rxjs"
 
@@ -45,14 +46,14 @@ export class DialogButtonComponent implements OnInit, OnDestroy {
      */
     displayQuantity$!: Observable<number>
 
-    /** Manages all subscriptions for proper cleanup */
-    private readonly subscriptions = new Subscription()
-
     /** Tracks whether the checkout dialog is currently open */
     private readonly isDialogOpen = new BehaviorSubject<boolean>(false)
 
     /** Stores the cart quantity at the moment when the dialog was opened */
     private frozenQuantity: number = 0
+
+    /** Subject for managing component lifecycle */
+    private readonly destroy$ = new Subject<void>()
 
     /**
      * @param cartService Service that manages cart data and operations
@@ -72,48 +73,41 @@ export class DialogButtonComponent implements OnInit, OnDestroy {
      * - Frozen quantity (when dialog is open)
      */
     ngOnInit(): void {
-        // Create an observable that shows either real-time or the cart quantity
+        // Create an observable that shows either real-time or frozen cart quantity
         this.displayQuantity$ = combineLatest([
             this.cartService.totalQuantity$,
             this.isDialogOpen,
         ]).pipe(
-            map(([totalQuantity, isDialogOpen]) => {
-                if (isDialogOpen) {
-                    return this.frozenQuantity
-                }
-                return totalQuantity
-            })
+            map(([totalQuantity, isDialogOpen]) => isDialogOpen ? this.frozenQuantity : totalQuantity)
         )
 
         // Subscribe to cart changes
-        this.subscriptions.add(
-            this.cartService.getCart().subscribe((data: Product[]) => {
+        this.cartService.getCart()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((data: Product[]) => {
                 this.cart = data
                 this.cdr.markForCheck()
             })
-        )
 
-        // Store the current quantity when it changes (while dialog is closed)
-        this.subscriptions.add(
-            combineLatest([
-                this.cartService.totalQuantity$,
-                this.isDialogOpen
-            ])
-                .pipe(
-                    tap(([totalQuantity, isDialogOpen]) => {
-                        if (!isDialogOpen) {
-                            this.frozenQuantity = totalQuantity
-                        }
-                    })
-                ).subscribe()
-        )
+        // Update frozen quantity when total quantity changes (while dialog is closed)
+        combineLatest([
+            this.cartService.totalQuantity$,
+            this.isDialogOpen
+        ])
+            .pipe(
+                takeUntil(this.destroy$),
+                tap(([totalQuantity, isDialogOpen]) => {
+                    if (!isDialogOpen) { this.frozenQuantity = totalQuantity }
+                })
+            ).subscribe()
     }
 
     /**
      * Cleans up all subscriptions when component is destroyed
      */
     ngOnDestroy(): void {
-        this.subscriptions.unsubscribe()
+        this.destroy$.next()
+        this.destroy$.complete()
     }
 
     /**
@@ -139,44 +133,45 @@ export class DialogButtonComponent implements OnInit, OnDestroy {
         })
 
         // Handle dialog close
-        this.subscriptions.add(
-            dialogRef.afterClosed().subscribe((returnedProducts: Product[]) => {
+        dialogRef.afterClosed()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((returnedProducts: Product[]) => {
                 // Resume real-time updates when dialog closes
                 this.isDialogOpen.next(false)
 
-                if (returnedProducts) {
-                    const changedProductIds: number[] = []
-
-                    // Track products that were modified or removed
-                    originalCart.forEach((originalProduct) => {
-                        const returnedProduct = returnedProducts.find(
-                            (p) => p.id === originalProduct.id
-                        )
-                        if (
-                            !returnedProduct ||
-                            returnedProduct.quantity !==
-                                originalProduct.quantity
-                        ) {
-                            changedProductIds.push(originalProduct.id)
-                        }
-                    })
-
-                    // Track new products that were added
-                    returnedProducts.forEach((product) => {
-                        if (!originalIds.has(product.id)) {
-                            changedProductIds.push(product.id)
-                        }
-                    })
-
-                    // Refresh only the products that changed
-                    this.cartService.refreshCart(
-                        Array.from(new Set(changedProductIds))
-                    )
-                    this.cdr.detectChanges()
-                } else {
+                if (!returnedProducts) {
                     console.log("Dialog closed without data")
+                    return
+                }
+
+                const changedProductIds = this.getChangedProductIds(originalCart, returnedProducts, originalIds)
+
+                if (changedProductIds.length > 0) {
+                    // Refresh only the products that changed
+                    this.cartService.refreshCart(changedProductIds)
+                    this.cdr.detectChanges()
                 }
             })
-        )
+    }
+
+    private getChangedProductIds(originalCart: Product[], returnedProducts: Product[], originalIds: Set<number>): number[] {
+        const changedIds = new Set<number>()
+
+        // Find modified or removed products
+        originalCart.forEach((originalProduct) => {
+            const returnedProduct = returnedProducts.find((p) => p.id === originalProduct.id)
+            if (!returnedProduct || returnedProduct.quantity !== originalProduct.quantity) {
+                changedIds.add(originalProduct.id)
+            }
+        })
+
+        // Find newly added products
+        returnedProducts.forEach((product) => {
+            if (!originalIds.has(product.id)) {
+                changedIds.add(product.id)
+            }
+        })
+
+        return Array.from(changedIds)
     }
 }
