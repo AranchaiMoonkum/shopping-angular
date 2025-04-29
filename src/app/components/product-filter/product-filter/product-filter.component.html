@@ -9,7 +9,7 @@
         -->
         <mat-select
             formControlName="category"
-            (selectionChange)="onCategoryChange()"
+            (selectionChange)="onCategoryChange($event)"
         >
             <!-- Dynamic list of categories from parent component -->
             <mat-option *ngFor="let category of categories" [value]="category">
@@ -27,7 +27,7 @@
         -->
         <mat-select
             formControlName="sort"
-            (selectionChange)="onSortChange()"
+            (selectionChange)="onSortChange($event)"
         >
             <!-- Predefined sort options from component -->
             <mat-option

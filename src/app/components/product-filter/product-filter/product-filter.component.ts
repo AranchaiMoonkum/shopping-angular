@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core"
 import { FormBuilder, FormGroup } from "@angular/forms"
 import { ProductFilters, Sort } from "../../../types/interface"
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs"
+import { MatSelectChange } from "@angular/material/select"
 
 /**
  * Component that provides a filtering and sorting controls for product catalog.
@@ -108,22 +109,18 @@ export class ProductFilterComponent implements OnInit {
      * Handles category dropdown changes
      * Updates form control and triggers filter change
      */
-    onCategoryChange(): void {
+    onCategoryChange(event: MatSelectChange): void {
         // Update the form control
-        this.filterForm.get("category")?.setValue(
-            this.filterForm.get("category")?.value, { emitEvent: true }
-        )
+        this.filterForm.get("category")?.setValue(event.value, { emitEvent: true })
     }
 
     /**
      * Handles sort dropdown changes
      * Updates form control and triggers filter change
      */
-    onSortChange(): void {
+    onSortChange(event: MatSelectChange): void {
         // Update the form control
-        this.filterForm.get("sort")?.setValue(
-            this.filterForm.get("sort")?.value, { emitEvent: true }
-        )
+        this.filterForm.get("sort")?.setValue(event.value, { emitEvent: true })
     }
 
     /**
