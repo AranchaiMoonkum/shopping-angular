@@ -1,22 +1,25 @@
-import { ProductService } from "./../../../services/product.service"
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     OnDestroy,
     OnInit,
 } from "@angular/core"
 import { Product, ProductFilters } from "../../../types/interface"
-import { ApiService } from "../../../services/api.service"
 import { CartService } from "../../../services/cart.service"
-import { Subscription } from "rxjs"
+import { Subject, takeUntil } from "rxjs"
+import { ActivatedRoute } from "@angular/router"
 
 /**
- * Component that displays a filterable, sortable product catalog.
- * Features include:
- * - Product filtering by category and search term
- * - Multiple sorting options (price, name)
- * - Real-time cart quantity updates
- * - OnPush change detection for better performance
+ * Component for displaying and managing a dynamic product catalog.
+ * 
+ * Features:
+ * - Product filtering by category and search text
+ * - Sorting by price (ascending/descending) and name (A-Z/Z-A)
+ * - Real-time cart quantity updates with optimized rendering
+ * - Selective updates of only changed products for performance
+ * 
+ * Uses OnPush change detection strategy to minimize DOM updates.
  */
 @Component({
     selector: "app-show-product",
@@ -37,8 +40,8 @@ export class ShowProductComponent implements OnInit, OnDestroy {
     /** Currently selected category filter */
     selectedCategory: string = "all"
 
-    /** Collection of all subscriptions for proper cleanup */
-    private readonly subscriptions = new Subscription()
+    /** Subject to handle unsubscribing from all observables */
+    private readonly destroy$ = new Subject<void>()
 
     /**
      * Map of sort functions for different sort options
@@ -53,64 +56,67 @@ export class ShowProductComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * @param route Route with resolved data
      * @param apiService Service for fetching product data
      * @param productService Service for storing shared product state
      * @param cartService Service for managing cart operations
      */
     constructor(
-        private readonly apiService: ApiService,
-        private readonly productService: ProductService,
-        private readonly cartService: CartService
+        private readonly route: ActivatedRoute,
+        private readonly cartService: CartService,
+        private readonly cdr: ChangeDetectorRef
     ) {}
 
     /**
      * Initializes component by loading products and setting up subscriptions
-     * - Fetches products from API
-     * - Extracts unique categories
-     * - Sets up cart update listener
+     * - Loading product data from route resolver
+     * - Setting up initial product display
+     * - Extracting unique product categories
+     * - Subscribing to cart update notifications
      */
     ngOnInit(): void {
-        this.subscriptions.add(
-            this.apiService.getProducts().subscribe({
-                next: (data: { products: Product[] }) => {
-                    this.productService.setProducts(data.products)
-                    this.products = data.products
-                    this.productsDisplay = this.products
+        // Get pre-loaded product data from resolver
+        this.route.data
+        .pipe(
+            takeUntil(this.destroy$)
+        ).subscribe(data => {
+            const productsData = data["products"] 
+            this.products = productsData.products
+            this.productsDisplay = this.products
 
-                    // Extract unique categories with "all" as first option
-                    this.categories = [
-                        "all",
-                        ...new Set(this.products.map((p) => p.category)),
-                    ]
-                },
-                error: (err) => {
-                    console.error("Error fetching products:", err)
-                },
-            })
-        )
+            // Extract unique categories with "all" as first option
+            this.categories = [
+                "all",
+                ...new Set(this.products.map((p) => p.category)),
+            ]
 
-        // Listen for cart updates to refresh product quantities
-        this.subscriptions.add(
-            this.cartService.refreshCart$.subscribe(
-                (changedProductIds: number[]) => {
-                    this.updateProductQuantitiesSelectively(changedProductIds)
-                }
-            )
+            this.cdr.markForCheck()
+        })
+
+        this.cartService.refreshCart$
+        .pipe(
+            takeUntil(this.destroy$)
+        ).subscribe(
+            (changedProductIds: number[]) => {
+                this.updateProductQuantitiesSelectively(changedProductIds)
+                this.cdr.markForCheck()
+            }
         )
     }
 
     /**
-     * Cleanup subscriptions when component is destroyed
+     * Cleanup by emitting to the destroy subject
      */
     ngOnDestroy(): void {
-        this.subscriptions.unsubscribe()
+        this.destroy$.next()
+        this.destroy$.complete()
     }
 
     /**
-     * Updates quantity properties for specific products that changed in cart
-     * Creates new object references for OnPush change detection
+     * Updates only products that changed in the cart without full array recreation.
+     * Creates new references only for modified products to trigger OnPush detection.
      * 
-     * @param productIds IDs of products whose quantities changed
+     * @param productIds Array of product IDs that were modified in the cart
      */
     updateProductQuantitiesSelectively(productIds: number[]): void {
         this.products = this.products.map((product) => {
@@ -132,23 +138,24 @@ export class ShowProductComponent implements OnInit, OnDestroy {
 
     /**
      * Track function for ngFor directive to improve performance
-     * Uses product ID for identity tracking
+     * Angular uses this to minimize DOM operations when the product list changes.
      * 
-     * @param index Index of the item in the array
-     * @param product Product object being tracked
-     * @returns Unique identifier for the product
+     * @param index Position in the array (unused but required by ngFor)
+     * @param product Product object
+     * @returns The product's unique identifier
      */
     trackById(index: number, product: Product) {
         return product.id
     }
 
     /**
-     * Handles filter changes from the filter component
-     * - Filters by category
-     * - Applies sorting
-     * - Filters by search term
+     * Processes filter changes from the filter component and updates display.
+     * Applies filters in sequence:
+     * - Category filtering
+     * - Sorting by selected criteria
+     * - Text search filtering (case-insensitive)
      * 
-     * @param filters Object containing category, sort, and search criteria
+     * @param filters Object containing category, sort option, and search term
      */
     onFilterChange(filters: ProductFilters): void {
         // Apply category filter
