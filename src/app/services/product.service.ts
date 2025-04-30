@@ -48,14 +48,4 @@ export class ProductService {
     getCurrentProducts(): Product[] {
         return this.productSubject.getValue()
     }
-
-    /**
-     * Gets the current timestamp
-     * Used for display purposes in product components
-     * 
-     * @returns Current timestamp in milliseconds
-     */
-    getTimeStamp(): number {
-        return Date.now()
-    }
 }

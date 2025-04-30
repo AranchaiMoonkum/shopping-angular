@@ -72,16 +72,6 @@ export class CardProductComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Gets the current quantity of the product in the cart
-     * Used for displaying when product data was last updated
-     * 
-     * @returns Current timestamp number
-     */
-    getTimeStamp(): number {
-        return this.productService.getTimeStamp()
-    }
-
-    /**
      * Gets the quantity of this product in the shopping cart 
      * 
      * @param product The product to check quantity for

@@ -4,7 +4,7 @@
 -->
 <mat-toolbar class="navbar">
     <!--
-      Primary toolbar row containing logo, title, and timestamp
+      Primary toolbar row containing logo, and title
       Uses Material toolbar layout components for responsive design
     -->
     <mat-toolbar-row class="navbar__nav">
@@ -18,11 +18,5 @@
                 <a href="/">Shopping Website</a>
             </span>
         </div>
-
-        <!--
-          Timestamp display showing when data was last updated
-          Updates dynamically from the ProductService
-        -->
-        {{ getTimeStamp() }}
     </mat-toolbar-row>
 </mat-toolbar>
