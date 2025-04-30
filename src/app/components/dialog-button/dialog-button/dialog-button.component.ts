@@ -154,6 +154,20 @@ export class DialogButtonComponent implements OnInit, OnDestroy {
             })
     }
 
+    /**
+     * Calculates which products were modified in the checkout dialog
+     * by comparing original and returned cart contents
+     * 
+     * Detects three types of changes:
+     * - Products whose quantities were modified
+     * - Products that were removed from the cart
+     * - New products that were added to the cart
+     * 
+     * @param originalCart Products in cart when dialog was opened
+     * @param returnedProducts Products in cart when dialog was closed
+     * @param originalIds Set of product IDs present in original cart for faster lookups
+     * @returns Array of product IDs that were added, removed, or modified
+     */
     private getChangedProductIds(originalCart: Product[], returnedProducts: Product[], originalIds: Set<number>): number[] {
         const changedIds = new Set<number>()
 
