@@ -16,6 +16,25 @@
     </div>
 </section>
 
+<section *ngIf="hasError">
+    <div class="error-message">
+        <h2>Unable to load products</h2>
+        <p>An error occurred. Please try again later.</p>
+    </div>
+
+    <div class="error-button">
+        <button
+            (click)="startAutoRefresh()"
+        >
+            {{
+                isAutoRefreshing
+                    ? "Stop Auto-Refresh"
+                    : "Start Auto-Refresh (every 5s)"
+            }}
+        </button>
+    </div>
+</section>
+
 <!-- Main product display grid section -->
 <section class="product-section">
     <!-- Container for product cards with optimized rendering -->

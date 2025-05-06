@@ -7,18 +7,20 @@ import {
 } from "@angular/core"
 import { Product, ProductFilters } from "../../../types/interface"
 import { CartService } from "../../../services/cart.service"
-import { Subject, takeUntil } from "rxjs"
+import { Subject, takeUntil, interval, Subscription } from "rxjs"
 import { ActivatedRoute } from "@angular/router"
+import { ApiService } from "../../../services/api.service"
 
 /**
  * Component for displaying and managing a dynamic product catalog.
- * 
+ *
  * Features:
  * - Product filtering by category and search text
  * - Sorting by price (ascending/descending) and name (A-Z/Z-A)
  * - Real-time cart quantity updates with optimized rendering
  * - Selective updates of only changed products for performance
- * 
+ * - Periodic data fetching with error handling
+ *
  * Uses OnPush change detection strategy to minimize DOM updates.
  */
 @Component({
@@ -40,13 +42,22 @@ export class ShowProductComponent implements OnInit, OnDestroy {
     /** Currently selected category filter */
     selectedCategory: string = "all"
 
+    /** Track if there was an error loading products */
+    hasError: boolean = false
+
+    /** Controls whether auto-refresh is active */
+    isAutoRefreshing: boolean = false
+
+    /** Stores the interval subscription for cleanup */
+    private refreshSubscription?: Subscription
+
     /** Subject to handle unsubscribing from all observables */
     private readonly destroy$ = new Subject<void>()
 
     /**
      * Map of sort functions for different sort options
      * Each function compares two products and returns a number indicating order
-     */    
+     */
     private readonly sortFunctions = {
         none: () => 0,
         "price-asc": (a: Product, b: Product) => a.price - b.price,
@@ -59,11 +70,13 @@ export class ShowProductComponent implements OnInit, OnDestroy {
      * @param route Route with resolved data
      * @param cartService Service for managing cart operations
      * @param cdr Reference to the change detector for manual change detection triggering
+     * @param apiService Service for fetching product data from API
      */
     constructor(
         private readonly route: ActivatedRoute,
         private readonly cartService: CartService,
-        private readonly cdr: ChangeDetectorRef
+        private readonly cdr: ChangeDetectorRef,
+        private readonly apiService: ApiService
     ) {}
 
     /**
@@ -75,12 +88,10 @@ export class ShowProductComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         // Get pre-loaded product data from resolver
-        this.route.data
-        .pipe(
-            takeUntil(this.destroy$)
-        ).subscribe(data => {
-            const productsData = data["products"] 
+        this.route.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+            const productsData = data["products"]
             this.products = productsData.products
+            this.hasError = productsData.hasError
             this.productsDisplay = this.products
 
             // Extract unique categories with "all" as first option
@@ -93,28 +104,78 @@ export class ShowProductComponent implements OnInit, OnDestroy {
         })
 
         this.cartService.refreshCart$
-        .pipe(
-            takeUntil(this.destroy$)
-        ).subscribe(
-            (changedProductIds: number[]) => {
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((changedProductIds: number[]) => {
                 this.updateProductQuantitiesSelectively(changedProductIds)
                 this.cdr.markForCheck()
-            }
-        )
+            })
     }
 
     /**
      * Cleanup by emitting to the destroy subject
      */
     ngOnDestroy(): void {
+        if (this.refreshSubscription) {
+            this.refreshSubscription.unsubscribe()
+        }
+
         this.destroy$.next()
         this.destroy$.complete()
     }
 
     /**
+     * Start auto-refreshing data every 5 seconds
+     */
+    startAutoRefresh(): void {
+        if (this.isAutoRefreshing) return
+
+        this.isAutoRefreshing = true
+        this.refreshSubscription = interval(5000)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
+                this.fetchProducts()
+            })
+
+        // Fetch immediately when button is clicked
+        this.fetchProducts()
+        this.cdr.markForCheck()
+    }
+
+    /**
+     * Fetch product data from API
+     */
+    fetchProducts(): void {
+        this.apiService
+            .getProducts()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.products = data.products
+                    this.hasError = false
+                    this.productsDisplay = this.products
+
+                    // Update categories
+                    this.categories = [
+                        "all",
+                        ...new Set(this.products.map((p) => p.category)),
+                    ]
+
+                    this.cdr.markForCheck()
+                },
+                error: (err) => {
+                    console.error("Error fetching products:", err)
+                    this.products = []
+                    this.productsDisplay = []
+                    this.hasError = true
+                    this.cdr.markForCheck()
+                },
+            })
+    }
+
+    /**
      * Updates only products that changed in the cart without full array recreation.
      * Creates new references only for modified products to trigger OnPush detection.
-     * 
+     *
      * @param productIds Array of product IDs that were modified in the cart
      */
     updateProductQuantitiesSelectively(productIds: number[]): void {
@@ -129,7 +190,9 @@ export class ShowProductComponent implements OnInit, OnDestroy {
         })
 
         // Update displayed products efficiently with a lookup
-        const productLookup = new Map(this.products.map((product) => [product.id, product]))
+        const productLookup = new Map(
+            this.products.map((product) => [product.id, product])
+        )
         this.productsDisplay = this.productsDisplay.map(
             (product) => productLookup.get(product.id) || product
         )
@@ -138,7 +201,7 @@ export class ShowProductComponent implements OnInit, OnDestroy {
     /**
      * Track function for ngFor directive to improve performance
      * Angular uses this to minimize DOM operations when the product list changes.
-     * 
+     *
      * @param index Position in the array (unused but required by ngFor)
      * @param product Product object
      * @returns The product's unique identifier
@@ -153,7 +216,7 @@ export class ShowProductComponent implements OnInit, OnDestroy {
      * - Category filtering
      * - Sorting by selected criteria
      * - Text search filtering (case-insensitive)
-     * 
+     *
      * @param filters Object containing category, sort option, and search term
      */
     onFilterChange(filters: ProductFilters): void {
@@ -181,5 +244,7 @@ export class ShowProductComponent implements OnInit, OnDestroy {
                     .includes(filters.search.toLowerCase())
             )
         }
+
+        this.cdr.markForCheck()
     }
 }
